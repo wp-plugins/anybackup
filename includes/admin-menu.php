@@ -278,7 +278,7 @@
       </div>
       <div class="col-md-10 col-sm-12 pull-left logo-section">
         <div class='logo-container'>
-          <span class='icon-96'><img src="<?php echo plugins_url("anybackup/assets/logo-512x512.png"); ?>"/></span>
+          <span class='icon-96'><img src="<?php echo plugins_url("anybackup/plugin-assets/logo-512x512.png"); ?>"/></span>
         </div>
         <span class='branding'>
           <h1 id='brand-name'>AnyBackup</h1>

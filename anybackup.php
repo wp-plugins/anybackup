@@ -3,7 +3,7 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
@@ -51,19 +51,19 @@ function bits_anybackup_deactivation() {
 
 function bits_init() {
   wp_register_script('anybackup-angular',
-    plugins_url( '/assets/anybackup-angular-1.2.20.min.js', __FILE__ ));
+    plugins_url( '/plugin-assets/anybackup-angular-1.2.20.min.js', __FILE__ ));
   wp_register_script('anybackup-angular-ui',
-    plugins_url( '/assets/anybackup-angular-ui-bootstrap-0.12.0.min.js', __FILE__ ));
+    plugins_url( '/plugin-assets/anybackup-angular-ui-bootstrap-0.12.0.min.js', __FILE__ ));
   wp_register_script('anybackup-wordpress',
-    plugins_url( '/assets/anybackup-wordpress-1.0.js', __FILE__ ));
+    plugins_url( '/plugin-assets/anybackup-wordpress-1.0.js', __FILE__ ));
   wp_register_script('anybackup-moment',
-    plugins_url( '/assets/moment-2.8.2.min.js', __FILE__ ));
+    plugins_url( '/plugin-assets/moment-2.8.2.min.js', __FILE__ ));
   wp_register_style('anybackup-bootstrap',
-    plugins_url( '/assets/anybackup-bootstrap-namespaced-3.2.0.css', __FILE__ ));
+    plugins_url( '/plugin-assets/anybackup-bootstrap-namespaced-3.2.0.css', __FILE__ ));
   wp_register_style('anybackup-wordpress',
-    plugins_url( '/assets/anybackup-wordpress-1.0.css', __FILE__ ));
+    plugins_url( '/plugin-assets/anybackup-wordpress-1.0.css', __FILE__ ));
   wp_register_style('anybackup-font-awesome',
-    plugins_url( '/assets/font-awesome-4.3.0/css/font-awesome.min.css', __FILE__ ));
+    plugins_url( '/plugin-assets/font-awesome-4.3.0/css/font-awesome.min.css', __FILE__ ));
 }
 function bits_load_scripts() {
   wp_enqueue_script('anybackup-angular');
@@ -76,7 +76,7 @@ function bits_load_scripts() {
 }
 
 function bits_anybackup_menu() {
-  $icon = plugins_url("anybackup/assets/logo-20x20.png");
+  $icon = plugins_url("anybackup/plugin-assets/logo-20x20.png");
   add_menu_page(__('AnyBackup'), __('AnyBackup'), 'manage_options', 'backup_bits_anybackup', 'bits_anybackup_menu_render', $icon); 
 }
 

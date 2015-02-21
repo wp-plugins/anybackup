@@ -1,0 +1,226 @@
+.selectable {
+  cursor: pointer;
+}
+.selectedRow,
+.table-hover tbody tr:hover.selectedRow td,
+.table-hover tbody tr:hover.selectedRow th {
+  background: #fcf8e3 !important;
+}
+.table-striped > tbody > tr:nth-child(odd).selectedRow > td {
+  background: #fcf8e3 !important;
+}
+.selectedRow i.fa-angle-right {
+  font-weight: 800;
+  display: block;
+}
+i.fa-angle-right {
+  font-weight: 100;
+  float: right;
+  font-size: 110%;
+}
+footer ul {
+  padding-top: 20px;
+}
+footer ul li {
+  float: left;
+  margin-right: 10px;
+}
+.backup-list {
+  padding-top: 20px;
+}
+.backup-info {
+  margin-top: 20px;
+}
+.backup-info .title {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+.backup-info form {
+  border-bottom: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+.backup-details {
+  padding: 8px;
+}
+th.id {
+  width: 1.5em;
+  text-align: center;
+}
+.plan-box.current-plan {
+  border: 1px solid #808080;
+}
+#debugBar {
+  background-color: #ff0;
+  height: 20px;
+}
+.right-align {
+  text-align: right;
+}
+.bootstrap-wrapper {
+  margin-right: 4%;
+}
+.bootstrap-styles .btn.btn-premium {
+  background-color: #ef5439;
+  color: #fff;
+  font-size: 0.85em;
+}
+.bootstrap-styles .btn.btn-premium:hover {
+  background-color: #f1654d;
+  color: #fff;
+}
+.bootstrap-styles .premium {
+  color: #ef5439;
+}
+.bootstrap-styles .premium a {
+  color: #ef5439;
+  font-weight: bold;
+}
+.bootstrap-styles .spacer {
+  padding-top: 4px;
+  padding-bottom: 6px;
+}
+.bootstrap-styles .panel.panel-free .panel-heading {
+  background-color: #808080;
+}
+.bootstrap-styles .panel {
+  text-align: center;
+}
+.bootstrap-styles .panel:hover {
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4), 0 1px 5px rgba(130,130,130,0.35);
+}
+.bootstrap-styles .panel-body {
+  padding: 0px;
+  text-align: center;
+}
+.bootstrap-styles .the-price {
+  background-color: rgba(220,220,220,0.17);
+  box-shadow: 0 1px 0 #dcdcdc, inset 0 1px 0 #fff;
+  padding: 20px;
+  margin: 0;
+}
+.bootstrap-styles .the-price h1 {
+  line-height: 1em;
+  padding: 0;
+  margin: 0;
+}
+.bootstrap-styles .subscript {
+  font-size: 25px;
+}
+.bootstrap-styles .cnrflash {
+  position: absolute;
+  top: -9px;
+  right: 4px;
+  z-index: 1;
+  overflow: hidden;
+  width: 100px;
+  height: 100px;
+  border-radius: 3px 5px 3px 0;
+}
+.bootstrap-styles .cnrflash-inner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 145px;
+  height: 145px;
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -webkit-transform-origin: 100% 100%;
+  -ms-transform-origin: 100% 100%;
+  -o-transform-origin: 100% 100%;
+  -moz-transform-origin: 100% 100%;
+  background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.1) 50%), linear-gradient(0deg, transparent 0%, rgba(1,1,1,0.2) 50%);
+  background-size: 4px, auto, auto, auto;
+  background-color: #aa0101;
+  box-shadow: 0 3px 3px 0 rgba(1,1,1,0.5), 0 1px 0 0 rgba(1,1,1,0.5), inset 0 -1px 8px 0 rgba(255,255,255,0.3), inset 0 -1px 0 0 rgba(255,255,255,0.2);
+}
+.bootstrap-styles .cnrflash-inner:before {
+  left: 1px;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+}
+.bootstrap-styles .cnrflash-inner:after {
+  right: 0;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+.bootstrap-styles .cnrflash-inner:before,
+.bootstrap-styles .cnrflash-inner:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  bottom: -16px;
+  width: 0;
+  height: 0;
+  border: 8px solid #800000;
+}
+.bootstrap-styles .cnrflash-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  padding-bottom: 5px;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(1,1,1,0.8);
+  font-size: 0.95em;
+  font-weight: bold;
+  text-align: center;
+}
+.icon-96 {
+  float: left;
+  position: relative;
+  top: 17px;
+  min-width: 96px;
+  min-height: 96px;
+}
+.icon-96 img {
+  width: 128px;
+  z-index: 1;
+}
+h1#brand-name {
+  margin-top: 14px;
+  padding-top: 0px;
+  margin-bottom: 4px;
+}
+.vertical-divider {
+  float: left;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-right: 1px solid #ccc;
+  height: 100px;
+  position: relative;
+  top: 17px;
+}
+.logo-container {
+  float: left;
+  height: 140px;
+  width: 130px;
+  margin-right: 8px;
+}
+.logo-section {
+  margin-bottom: 5px;
+}
+.branding label {
+  font-weight: 400;
+  margin-top: 8px;
+}
+.branding .btn {
+  margin-top: 2px;
+}
+.top-section {
+  margin-top: 17px;
+  position: relative;
+}
+.no-left-padding {
+  padding-left: 0px;
+}
