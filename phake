@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/vendor/phake/lib/includes.php';
+//require __DIR__ . '/../vendor/autoload.php';
+
+$bin = new phake\Bin();
+$bin->execute($GLOBALS['argv']);
