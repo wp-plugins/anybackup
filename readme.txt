@@ -4,11 +4,11 @@ Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, 
 Requires at least: 4.0
 Tested up to: 4.1
 License: MIT
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
-AnyBackup.  One-click cloud backup/migrate/restore/preview.  No configuration required.
+One-click backup and restore in the cloud.  No configuration required.  Free personal plan.
 
 == Description ==
 
