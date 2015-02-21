@@ -12,8 +12,22 @@ AnyBackup.  One-click cloud backup/migrate/restore/preview.  No configuration re
 
 == Description ==
 
-With AnyBackup it's easy to prevent against disasters, hackers, and mistakes.  No storage limits.  No configuration required.  Free for personal
-use(up to one site).  All data is stored on our secure servers in at least 3 different geological locations across the world.  We are 
+AnyBackup makes it easy to prevent against disasters, hackers, and mistakes.
+
+Our unique features:
+
+*  Free for personal use
+*  No limits on restores
+*  No storage limits
+*  Live preview
+*  Zero-downtime restore
+*  Works on low-memory VPS shared environments
+*  Very low impact on busy servers
+*  No configuration required
+*  Premium support includes a direct line to the engineers
+
+
+All data is stored on our secure servers in at least 3 different geological locations across the world.  We are 
 committed to helping you rest easy.
 
 
@@ -45,12 +59,14 @@ committed to helping you rest easy.
 
 
 == Screenshots ==
+
 * A brand new install.
 * Your site, backing up.
 
 == Docs & Support ==
 
 Unique features include:
+
 * One button backup and backup-scheduling
 * Works on low memory shared hosts and VPS servers
 * No setup
@@ -62,6 +78,7 @@ Unique features include:
 * Restores are always available for all users.  We never hold your data hostage.
 
 = Requirements =
+
 * Supports php 4 and above
 * Supported on wordpress 4 and above
 * Multisite and BuddyPress support available for premium users
