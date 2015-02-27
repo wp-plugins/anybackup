@@ -12,7 +12,7 @@ One-click backup and restore in the cloud.  No configuration required.  Free per
 
 == Description ==
 
-[https://anybackup.io](AnyBackup) makes it easy to prevent against disasters, hackers, and mistakes.
+[AnyBackup](https://anybackup.io) makes it easy to prevent against disasters, hackers, and mistakes.
 
 Our unique features:
 
