@@ -22,7 +22,8 @@
       if($next == "scan_table") {
         $table = $next_step['table'];
         $page = $next_step['page'];
-        return $worker->scan_table($backup_id, $table, $page);
+        $table_fingerprint = $next_step['fingerprint'];
+        return $worker->scan_table($backup_id, $table, $page, $table_fingerprint);
       }
       if($next == "upload_files") {
         $page = $next_step['page'];

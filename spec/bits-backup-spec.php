@@ -99,7 +99,6 @@ function fail($obj) {
     <td>API add to backup (schema doesn't exist)</td>
     <td>
       <?php
-          $GLOBALS["BITS_DEBUG"]=true;
           $backup = create_backup($api, array( "test" => "true" ));
           $result = $api->add_schemas_to_backup($backup["id"], ['no-exist'] );
           if(
@@ -107,8 +106,32 @@ function fail($obj) {
             count($result["schemas"]) == 1 &&
             $result['schemas'][0]['status'] == 200
           ) { pass(); } else { fail($result); };
-          $GLOBALS["BITS_DEBUG"]=false;
       ?>
+    </td>
+  </tr>
+ 
+  <tr>
+    <td>API can ignore AUTO_INCREMENT=\d+ in schemas</td>
+    <td>
+      <?php
+          function test_replace_autoincrement($api, $str, $res) {
+            if($api->schema_fingerprint_replace_autoincrement($str) != $res) {
+              $was = $api->schema_fingerprint_replace_autoincrement($str);
+              fail("remove autoincrement from:<br/>$str<br/> is not equal to: <br/>$res<br/> was: <br/>$was");
+              return false;
+            }
+            return true;
+          }
+          $auto = "CREATE TABLE `wp_options` ( `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, `option_name` varchar(64) NOT NULL DEFAULT '', `option_value` longtext NOT NULL, `autoload` varchar(20) NOT NULL DEFAULT 'yes', PRIMARY KEY (`option_id`), UNIQUE KEY `option_name` (`option_name`) ) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8";
+          $no_auto = "CREATE TABLE `wp_options` ( `option_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, `option_name` varchar(64) NOT NULL DEFAULT '', `option_value` longtext NOT NULL, `autoload` varchar(20) NOT NULL DEFAULT 'yes', PRIMARY KEY (`option_id`), UNIQUE KEY `option_name` (`option_name`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+          if(test_replace_autoincrement($api, "AUTO_INCREMENT=", "AUTO_INCREMENT=") && 
+            test_replace_autoincrement($api, $auto, $no_auto) && 
+            test_replace_autoincrement($api, $no_auto, $no_auto)
+          ) {
+            pass();
+          } 
+      ?>
+
     </td>
   </tr>
   <tr>
@@ -250,7 +273,7 @@ function fail($obj) {
           $backup = create_backup($api, array( "test" => "true" ));
           $commit = $api->commit_backup($backup["id"]);
           $restore = $api->create_restore($backup["id"]);
-          $files = array(BitsUtil::fs_get_wp_config_path()."./wp-config.php");
+          $files = array(BitsUtil::fs_get_wp_config_path()."./index.php");
           $result = $api->restore_file_operations($restore["id"], $files);
 
           if(!is_wp_error($result) && count($result) == 1) { pass(); } else { fail($result); };
@@ -317,9 +340,10 @@ function fail($obj) {
     <td>API create rows </td>
     <td>
       <?php
-          $result = $api->create_schemas(["test"]);
-          $row1 = array( "content" => array( "field", "".microtime() ), "schema" => "test");
-          $row2 = array( "content" => array( "field", "".microtime() . 1 ), "schema" => "test");
+          $schema = "test".microtime();
+          $result = $api->create_schemas([$schema]);
+          $row1 = array( "content" => array( "field", "".microtime() ), "schema" => sha1($schema));
+          $row2 = array( "content" => array( "field", "".microtime() . 1 ), "schema" => sha1($schema));
           $result = $api->create_rows([ $row1, $row2 ]);
           if(count($result) == 2 && $result[0]["status"] == 200) { pass(); } else { fail($result); };
       ?>
@@ -338,11 +362,12 @@ function fail($obj) {
     <td>API create row group </td>
     <td>
       <?php
-          $result = $api->create_schemas(["test"]);
-          $row1 = array( "content" => array( "field", microtime() ), "schema" => "test");
+          $schema = "test".microtime();
+          $result = $api->create_schemas([$schema]);
+          $row1 = array( "content" => array( "field", microtime() ), "schema" => sha1($schema));
           $row_result = $api->create_rows([ $row1 ]);
-          $row_group1 = array( "rows" => [ "not-found" ], "schema" => "test" );
-          $result = $api->create_row_groups(array(array("schema" => "test", "rows" => [$row1])));
+          $row_group1 = array( "rows" => [ "not-found" ], "schema" => sha1($schema) );
+          $result = $api->create_row_groups(array(array("schema" => sha1($schema), "rows" => [$row1])));
           if(count($result) == 1 && $result[0]["status"] == 200) { pass(); } else { fail($result); };
       ?>
     </td>
@@ -553,7 +578,7 @@ function fail($obj) {
           $backup_id = create_backup($api)["id"];
           $worker->scan_schema($backup_id);
           $schema = 'wp_posts';
-          $worker->scan_table($backup_id,$schema, 0);
+          $worker->scan_table($backup_id,$schema, 0, sha1(BitsUtil::get_schema($schema)));
           $result = $api->get_backup($backup_id);
           if(
             $result["row_group_count"] >= 1
@@ -596,7 +621,7 @@ function fail($obj) {
       $backup = create_backup($api, array( "test" => "true" ));
       $backup_worker = new BitsBackupWorker($api);
       $backup_worker->scan_schema($backup['id']);
-      $backup_worker->scan_table($backup['id'],"wp_posts", 0);
+      $backup_worker->scan_table($backup['id'],"wp_posts", 0, sha1(BitsUtil::get_schema("wp_posts")));
       $committed = $api->commit_backup($backup["id"]);
       return $api->create_restore($backup['id']);
     }

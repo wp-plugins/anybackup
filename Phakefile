@@ -12,6 +12,7 @@ task('build-plugin', function() {
     execute("cp -R js build/anybackup/");
     execute("cp -R images build/anybackup/");
     execute("cp -R assets build/anybackup/");
+    execute("cp -R plugin-assets build/anybackup/");
     execute("cp -R includes build/anybackup/");
     execute("cp -R *.php build/anybackup/");
     execute("(cd build && zip -r anybackup.zip anybackup)");

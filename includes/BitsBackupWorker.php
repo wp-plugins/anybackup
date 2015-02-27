@@ -83,15 +83,11 @@
       return true;
     }
 
-    function scan_table($backup_id, $table_name, $table_page) {
+    function scan_table($backup_id, $table_name, $table_page, $schema_fingerprint) {
       // grab all rows for table page
       $rows = $this->rows_for_table_page($table_name, $table_page);
-      
-      $table_schema = $this->get_schema($table_name);
-      if(is_wp_error($table_schema)) {
-        return $table_schema;
-      }
-      $rows = $this->api->add_rows_to_backup($backup_id, $rows, $table_schema);
+
+      $rows = $this->api->add_rows_to_backup($backup_id, $rows, $schema_fingerprint);
       if(is_wp_error($rows)) {
         return $rows;
       }
