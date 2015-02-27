@@ -1,10 +1,10 @@
-=== Backups made simple ===
+=== AnyBackup - Backup | Preview | Restore ===
 Contributors: 255bits
 Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, database, files, backups
 Requires at least: 4.0
 Tested up to: 4.1.1
 License: MIT
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
