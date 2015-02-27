@@ -5,26 +5,6 @@
     private $api;
     function __construct($api) {
       $this->api = $api;
-      if(function_exists('register_shutdown_function')) {
-        register_shutdown_function(array($this, "fatal_error"));
-      }
-    }
-
-    function fatal_error() {
-      $errfile = "unknown file";
-      $errstr  = "shutdown";
-      $errno   = E_CORE_ERROR;
-      $errline = 0;
-
-      $error = error_get_last();
-
-      if( $error !== NULL) {
-        $errno   = $error["type"];
-        $errfile = $error["file"];
-        $errline = $error["line"];
-        $errstr  = $error["message"];
-      }
-      $this->api->log("error", "Fatal PHP error during restore $errno - $errfile:$errline '$errstr'");
     }
     function query($sql, $lookup=ARRAY_N) {
       return BitsUtil::query($sql, $lookup);
