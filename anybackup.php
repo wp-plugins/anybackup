@@ -3,7 +3,7 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
