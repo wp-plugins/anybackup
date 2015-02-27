@@ -33,9 +33,11 @@ class BitsUtil {
       exec("renice +$priority ".getmypid());
     }
     static function reset_nice(){
-      // Kill us so that the thread priority will return to the default.  
-      // We cannot raise the priority due to linux standards.
-      posix_kill( getmypid(), 28 );
+      if(function_exists('posix_kill')) {
+        // Kill us so that the thread priority will return to the default.  
+        // We cannot raise the priority due to linux standards.
+        posix_kill( getmypid(), 28 );
+      }
     }
 
     static function all_tables() {

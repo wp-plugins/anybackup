@@ -161,6 +161,9 @@
         "site_uri" => $uri,
         "wordpress_version" => $version,
         "table_prefix" => $wpdb->prefix,
+        "php_version" => phpversion(),
+        "php_os" => PHP_OS,
+        "php_uname_s" => php_uname('s'),
         "paths" => array(
           "wp-config.php" => $wp_config_php_path,
           "wp-content" => $content_path,
@@ -197,16 +200,15 @@
      *
      * array(array( "field1" => "value1", "field2" => "value2" ), ...);
      *
-     * $schema is of the form:
-     * "CREATE TABLE ..."
+     * $schema_fingerprint is passed in from the current Step on the server
      */
-    function add_rows_to_backup($id, $row_contents, $schema) {
+    function add_rows_to_backup($id, $row_contents, $schema_fingerprint) {
       if(sizeof($row_contents) == 0) {
         return array();
       }
-      $rows = $this->build_rows_with_schema($row_contents, $schema);
+      $rows = $this->build_rows_with_schema($row_contents, $schema_fingerprint);
       // calculate row_group
-      $row_group = array("schema" => $schema, "rows" => $rows);
+      $row_group = array("schema" => $schema_fingerprint, "rows" => $rows);
       $row_group_fingerprint_map = $this->map_row_group_fingerprint($row_group);
       $row_group_fingerprint = $row_group_fingerprint_map["fingerprint"];
       // add row group
@@ -246,12 +248,12 @@
       return $rows;
     }
 
-    function build_rows_with_schema($row_contents, $schema) {
+    function build_rows_with_schema($row_contents, $schema_fingerprint) {
       $rows_with_content_and_schema = array();
       foreach($row_contents as $row) {
         array_push( $rows_with_content_and_schema, array(
           "content" => $row,
-          "schema" => $schema
+          "schema" => $schema_fingerprint
         ));
       }
       return $rows_with_content_and_schema;
@@ -266,7 +268,7 @@
      */
     function add_schemas_to_backup($id, $schemas) {
       //$GLOBALS["BITS_DEBUG"]=true;
-      $schema_fingerprints = array_map('sha1', $schemas);
+      $schema_fingerprints = array_map(array($this, "schema_fingerprint"), $schemas);
       $result = $this->call_api("POST", "backups/$id/add", array("schemas" => $schema_fingerprints));
       if(is_wp_error($result)) {
         return $result;
@@ -278,6 +280,20 @@
       $this->create_schemas($schemas_to_create);
       //$GLOBALS["BITS_DEBUG"]=false;
       return $this->call_api("POST", "backups/$id/add", array("schemas" => $schema_fingerprints));
+    }
+
+    /**
+     * Used internally
+     */
+    function schema_fingerprint($schema) {
+      return sha1($this->schema_fingerprint_replace_autoincrement($schema));
+    }
+
+    /**
+     * Used internally
+     */
+    function schema_fingerprint_replace_autoincrement($schema) {
+      return preg_replace('/ AUTO_INCREMENT=\d+/i', "", $schema);
     }
 
     /**
@@ -365,7 +381,7 @@
      * Used internally
      */
     function map_schema_fingerprint($sql) {
-      $sha1 = sha1($sql);
+      $sha1 = $this->schema_fingerprint($sql);
       return array("fingerprint" => $sha1, "sql" => $sql);
     }
 
@@ -395,7 +411,7 @@
     function map_row_fingerprint($row) {
       $sha1 = $this->fingerprint_for_row($row);
       $content = $this->json($row['content']);
-      return array("fingerprint" => $sha1, "content" => $content, "schema" => sha1($row["schema"]));
+      return array("fingerprint" => $sha1, "content" => $content, "schema" => $row["schema"]);
     }
 
     /**
@@ -404,7 +420,7 @@
     function map_row_group_fingerprint($row_group) {
       $sha1 = $this->fingerprint_for_row_group($row_group);
       $row_fingerprints = array_map(array($this, "fingerprint_for_row"), $row_group["rows"]);
-      return array("fingerprint" => $sha1, "rows" => $row_fingerprints, "schema" => sha1($row_group["schema"]));
+      return array("fingerprint" => $sha1, "rows" => $row_fingerprints, "schema" => $row_group["schema"]);
     }
 
 
@@ -681,8 +697,13 @@
       }
       $ctime = filectime($path);
       $mtime = filemtime($path);
-      $group = posix_getgrgid(filegroup($path))["name"];
-      $user = posix_getpwuid(fileowner($path))["name"];
+      if(function_exists("posix_getgrgid")) {
+        $group = posix_getgrgid(filegroup($path))["name"];
+        $user = posix_getpwuid(fileowner($path))["name"];
+      } else {
+        $group = "windows";
+        $user = "windows";
+      }
       $mode = fileperms($path);
       $type = $this->get_file_type($path);
       if($type == "file") {

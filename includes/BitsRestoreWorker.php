@@ -47,7 +47,12 @@
 
 
     function download_files($restore_id, $to_download) {
+      $download_i = 0;
       foreach($to_download as $download) {
+        if($download_i % 100 == 0) {
+          echo("Downloading file $download_i\n");
+        }
+        $download_i += 1;
         $fingerprint = $download["content_fingerprint"];
         $url = $download["url"];
 
