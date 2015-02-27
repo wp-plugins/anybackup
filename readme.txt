@@ -1,10 +1,10 @@
-=== AnyBackup ===
+=== Backups made simple ===
 Contributors: 255bits
 Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, database, files, backups
 Requires at least: 4.0
-Tested up to: 4.1
+Tested up to: 4.1.1
 License: MIT
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -12,7 +12,7 @@ One-click backup and restore in the cloud.  No configuration required.  Free per
 
 == Description ==
 
-AnyBackup makes it easy to prevent against disasters, hackers, and mistakes.
+[https://anybackup.io](AnyBackup) makes it easy to prevent against disasters, hackers, and mistakes.
 
 Our unique features:
 
@@ -21,6 +21,7 @@ Our unique features:
 *  No storage limits
 *  Live preview
 *  Zero-downtime restore
+*  One click migrations for switching hosts
 *  Works on low-memory VPS shared environments
 *  Very low impact on busy servers
 *  No configuration required
