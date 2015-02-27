@@ -4,7 +4,7 @@ Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, 
 Requires at least: 4.0
 Tested up to: 4.1.1
 License: MIT
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
