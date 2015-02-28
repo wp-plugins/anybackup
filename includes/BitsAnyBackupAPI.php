@@ -692,9 +692,6 @@
     }
 
     function get_file_metadata($path) {
-      while(is_link($path)) {
-        $path = $this->join_paths($path, readlink($path));
-      }
       $ctime = filectime($path);
       $mtime = filemtime($path);
       if(function_exists("posix_getgrgid")) {
@@ -717,7 +714,7 @@
         "group" => $group,
         "user" => $user,
         "mtime" => $mtime,
-        "path" => realpath($path),
+        "path" => $path,
         "mode" => $mode,
         "content_fingerprint" => $sha1
       );
