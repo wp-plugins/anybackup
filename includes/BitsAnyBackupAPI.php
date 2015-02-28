@@ -156,6 +156,7 @@
         $uploads_path = WP_CONTENT_DIR."/uploads";
       }
       return array(
+        "plugin_version" => $GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"],
         "site_name" => $name,
         "site_type" => "wordpress",
         "site_uri" => $uri,
