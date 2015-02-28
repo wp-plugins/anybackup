@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.1.7
+ * Version: 1.1.8
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.1.7";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.1.8";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -236,7 +236,9 @@ function bits_backup_get_status() {
   if($next_scheduled_backup) {
     $next_scheduled_backup -= time();
   }
-  $summary['next_scheduled_backup'] = $next_scheduled_backup;
+  if($summary['next_scheduled_backup'] < $next_scheduled_backup) {
+    $summary['next_scheduled_backup'] = $next_scheduled_backup;
+  }
 
   die($api->json($summary));
 }
