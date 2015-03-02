@@ -150,8 +150,8 @@
       }
       //TODO any of these arrays?
       $upload_dir = wp_upload_dir();
-      if(isset($upload_dir['path'])) {
-        $uploads_path = $upload_dir['path'];
+      if(isset($upload_dir['basedir'])) {
+        $uploads_path = $upload_dir['basedir'];
       } else {
         $uploads_path = WP_CONTENT_DIR."/uploads";
       }
