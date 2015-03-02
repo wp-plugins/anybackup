@@ -74,7 +74,7 @@
       $message = implode("\n", $messages);
       $this->api->log("error", "Error on step ".$stepname." : ".$message, array());
       bits_force_cancel_safe();
-      return $wp_error;
+      return true;
     }
 
 
