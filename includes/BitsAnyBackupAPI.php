@@ -865,17 +865,19 @@
         }
       }
 
+      $timeout = 60*5;
+
       switch ($method)
       {
           case "POST":
-            $request = wp_remote_post($url, array( "body" => $data, "headers" => $headers, "timeout" => 60*5 ));
+            $request = wp_remote_post($url, array( "body" => $data, "headers" => $headers, "timeout" => $timeout ));
             break;
           case "GET":
             if ($data)
               $url_with_params = sprintf("%s?%s", $url, http_build_query($data));
             else
               $url_with_params = $url;
-            $request = wp_remote_get($url_with_params, array("headers" => $headers, "timeout" => 60*5 ));
+            $request = wp_remote_get($url_with_params, array("headers" => $headers, "timeout" => $timeout ));
       }
 
       if(is_wp_error($request)) {

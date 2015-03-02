@@ -44,7 +44,7 @@
       $worker = new BitsBackupWorker($this->api);
       $next_step = $this->api->next_step();
       if(is_wp_error($next_step)) {
-        return $next_step;
+        return $this->handle_wp_error($next_step, "error-processing-step");
       }
       if($next_step == null || $next_step['step'] == null) {
         return true; // error or no backup
@@ -70,11 +70,7 @@
       $message = implode("\n", $messages);
       $this->api->log("error", "Error on step ".$stepname." : ".$message, array());
       bits_force_cancel_safe();
-      return $wp_error;
-    }
-
-    function reset() {
-      $this->api->set_save_state(array());
+      return true;
     }
 
   }
