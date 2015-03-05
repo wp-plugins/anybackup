@@ -4,7 +4,7 @@ Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, 
 Requires at least: 4.0
 Tested up to: 4.1.1
 License: MIT
-Stable tag: 1.1.11
+Stable tag: 1.1.12
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -31,6 +31,7 @@ Our unique features:
 All data is stored on our secure servers in at least 3 different geological locations across the world.  We are 
 committed to helping you rest easy.
 
+For developers, our backup process is detailed in the [AnyBackup API](https://anybackup.io/api/).
 
 == Installation ==
 
