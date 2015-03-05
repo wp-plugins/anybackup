@@ -165,6 +165,9 @@
         "php_version" => phpversion(),
         "php_os" => PHP_OS,
         "php_uname_s" => php_uname('s'),
+        "gzip" => function_exists("gzencode"),
+        "bzip2" => function_exists("bzcompress"),
+        "native_json_support" => function_exists("json_encode"),
         "paths" => array(
           "wp-config.php" => $wp_config_php_path,
           "wp-content" => $content_path,
@@ -458,9 +461,20 @@
       if($obj == null) {
         return "{}";
       }
+      if(function_exists("json_encode")) {
+        return json_encode($obj);
+      }
       $json = new Services_JSON();
       $data = $json->encode($obj);
       return $data;
+    }
+
+    function json_decode($response) {
+      if(function_exists("json_decode")) {
+        return json_decode($response);
+      }
+      $json = new Services_JSON();
+      return $json->decode($response);
     }
 
     /**
@@ -934,8 +948,7 @@
       if(is_wp_error($response)) {
         return $response;
       }
-      #$json_obj = $json->decode($response);
-      $json_obj = json_decode($response);# TODO - this is not available in PHP 4
+      $json_obj = $this->json_decode($response);
       if($json_obj == null) {
         return new WP_Error('bad json response from anybackup server', $response);
       }
