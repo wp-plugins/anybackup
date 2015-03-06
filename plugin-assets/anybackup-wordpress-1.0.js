@@ -493,8 +493,10 @@
       return $scope.step_description = "Starting your backup";
     };
     $scope.readableDate = function(backup) {
+      var localTimeZone;
       if (backup && backup.committed_at) {
-        return moment.parseZone(backup.committed_at).calendar();
+        localTimeZone = new Date().getTimezoneOffset();
+        return moment.parseZone(backup.committed_at).zone(localTimeZone / 60).calendar();
       } else {
         return "";
       }
