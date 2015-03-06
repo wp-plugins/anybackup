@@ -49,13 +49,11 @@
       if($next_step == null || $next_step['step'] == null) {
         return true; // error or no backup
       }
-      $this->api->log("info", "Processing step ".$next_step['step'] );
       $process_result = $this->process_step($worker, $next_step);
       if(is_wp_error($process_result)) {
-        $this->api->log("info", "Error in processing ".$next_step['step']);
+        $this->api->log("warning", "Error in processing ".$next_step['step']);
         return $this->handle_wp_error($process_result, $next_step['step']);
       } else {
-        $this->api->log("info", "Processed ".$next_step['step']);
         $this->api->complete_step($next_step['step_id']);
       }
       if($next_step['step'] == 'complete') {

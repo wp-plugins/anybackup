@@ -9,10 +9,19 @@ class BitsUtil {
         }
         return $files;
       }
+      $path_exploded = preg_split("/[\\/\\\\]/", $path);
+      $path_name = $path_exploded[count($path_exploded)-1];
+      
+      if($path_name == "." || $path_name == "..") {
+        return array();
+      }
+
       if(!is_dir($path)) {
         return array($path);
       }
-      $contents = glob($path."/*");
+      $pattern = $path.'/{,.}*';
+      $contents = glob($pattern, GLOB_BRACE);
+
       $result = array($path);
       $globs = array_map(array('BitsUtil', "glob_r"), $contents);
       foreach($globs as $glob) {
