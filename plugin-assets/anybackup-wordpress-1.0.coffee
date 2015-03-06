@@ -387,7 +387,8 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
 
   $scope.readableDate = (backup) ->
     if(backup && backup.committed_at)
-      moment.parseZone(backup.committed_at).calendar()
+      localTimeZone = new Date().getTimezoneOffset()
+      moment.parseZone(backup.committed_at).zone(localTimeZone/60).calendar()
     else
       ""
 
