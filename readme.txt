@@ -4,7 +4,7 @@ Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, 
 Requires at least: 4.0
 Tested up to: 4.1.1
 License: MIT
-Stable tag: 1.1.14
+Stable tag: 1.1.15
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -17,19 +17,17 @@ One-click backup and restore in the cloud.  No configuration required.  Free per
 Our unique features:
 
 *  Free for personal use
-*  No limits on restores
-*  No storage limits
-*  Live preview
+*  One price, full product.  No microtransactions or addon-fees
+*  No limits on restores, backups, or storage space
+*  Live preview lets you test your backup anytime
 *  Zero-downtime restore
 *  One click migrations for switching hosts
 *  Works on low-memory VPS shared environments
-*  Very low impact on busy servers
 *  No configuration required
 *  Premium support includes a direct line to the engineers
 
 
-All data is stored on our secure servers in at least 3 different geological locations across the world.  We are 
-committed to helping you rest easy.
+All data is stored on our secure servers in at least 3 different geological locations across the world.
 
 For developers, our backup process is detailed in the [AnyBackup API](https://anybackup.io/api/).
 
@@ -95,6 +93,10 @@ AnyBackup for Wordpress uses:
 
 
 == Changelog ==
+
+=1.1.15=
+
+* Better support for user-initiated backups
 
 =1.1.14=
 
