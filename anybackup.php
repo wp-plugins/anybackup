@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.1.14
+ * Version: 1.1.15
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.1.14";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.1.15";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -130,8 +130,9 @@ function bits_start_backup_wp_cron() {
   $timestamp = wp_next_scheduled( 'bits_iterate_backup' );
 
   if( $timestamp == false ){
-    wp_schedule_event( time(), 'hourly', 'bits_iterate_backup' );
+    wp_schedule_event( time()+3600, 'hourly', 'bits_iterate_backup' );
   }
+  wp_schedule_single_event(time(), 'bits_user_initiated_backup');
 
 }
 
@@ -139,11 +140,20 @@ add_action( 'bits_iterate_backup', 'bits_create_backup' );
 function bits_create_backup(){
   BitsUtil::renice(20);
   $api = bits_get_api();
-  $api->create_backup(array("user-initiated" => true));
+  $api->create_backup(array());
   $sm = new BitsBackupStateMachine($api);
 
   $sm->run();
   BitsUtil::reset_nice();
+}
+
+add_action( 'bits_user_initiated_backup', 'bits_user_initiated_create_backup' );
+function bits_user_initiated_create_backup() {
+  $api = bits_get_api();
+  $api->create_backup(array("user-initiated" => true));
+  $sm = new BitsBackupStateMachine($api);
+
+  $sm->run();
 }
 
 add_action( 'bits_iterate_restore', 'bits_create_restore' );
@@ -189,7 +199,7 @@ function bits_login_account() {
 }
 
 function bits_backup_force_backup_now() {
-  wp_schedule_single_event(time(), 'bits_iterate_backup');
+  wp_schedule_single_event(time(), 'bits_user_initiated_backup');
   die('ok');
 }
 function bits_backup_start_job() {
