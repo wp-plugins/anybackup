@@ -296,6 +296,7 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
 
 
   $scope.selectBackup = (backup) ->
+    $scope.selectedBackup = backup
     request = $http {
       url: ajaxurl, 
       method: "GET",
