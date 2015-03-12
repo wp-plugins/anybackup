@@ -48,6 +48,22 @@
     }
 
     /**
+     * Called when the plugin is activated
+     */
+    function activate() {
+      $email = get_option("admin_email");
+      return $this->call_api("POST", "site_servers/activate", array("email" => $email));
+    }
+
+
+    /**
+     * Called when the plugin is deactivated
+     */
+    function deactivate() {
+      return $this->call_api("POST", "site_servers/deactivate", array());
+    }
+
+    /**
      * Register an account
      **/
     function create_account($email, $password) {

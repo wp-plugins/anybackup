@@ -295,7 +295,7 @@
               Your site will be backed up to our disaster proof servers.
             </p>
           </div>
-           <div ng-show='!email && (backups.length > 0 || backup_running || restore_running)' class='col-md-6 col-sm-6 col-xs-6 no-left-padding'>
+           <div ng-show='!email' class='col-md-6 col-sm-6 col-xs-6 no-left-padding'>
             <div class='alert alert-warning'><i class="fa fa-exclamation-triangle"></i> <a href='#' ng-click='openLogin()'>Login</a> or <a href='#' ng-click='openRegister()'>register</a> to access your backups in an emergency.</div>
           </div>
         </span>
@@ -303,7 +303,18 @@
       
     </div>
 
-    <div style="clear:both"></div>
+  <div style="clear:both"></div>
+
+  <div class="row" ng-show="backups.length == 0 && !backup_running">
+    <div class="col-md-12">
+      <h4>Oops!  Looks like there's a problem.</h4>
+      <p>
+        We test AnyBackup throughly, but sometimes unforseen issues can come up.  Our engineers have been notified.  If this is urgent, please contact us with our
+        <a ng-click='openSupport()'>Support</a> link.
+       </p>
+    </div>
+  </div>
+<div style="clear:both"></div>
     <div ng-show='showSupportMessage'>
       <div class='alert alert-success'>Thank you for your feedback.  We will be in touch as soon as possible.</div>
     </div>
@@ -324,7 +335,14 @@
           <button class='btn btn-danger' ng-show='backup_running || restore_running' ng-click='cancel()'>Cancel</button>
         </div>
       </div>
-      <div class="row" style="clear: both;">
+      <div class="row" ng-show="backups.length == 0 && backup_running">
+        <div class='col-md-12'>
+          <p>
+              Your first backup can take a while.  We are carefully syncing your site to avoid interrupting your visitors.  <br/><br/>Feel free to leave this page and check in later.
+           </p>
+        </div>
+      </div>
+      <div class="row" style="clear: both;" ng-hide="backups.length == 0 && backup_running">
         <div class="col-md-6 col-sm-6" ng-show='backup_allowed'>
           <div class='backup-status'>
             <span id="status-number">{{step_description}}</span>
@@ -335,7 +353,7 @@
     </div>
 
     <div style="clear:both"></div>
-
+  
     <div class="row" class="backup-list">
       <div class='backup-list col-md-4 col-sm-4' ng-show="backups.length > 0">
 
