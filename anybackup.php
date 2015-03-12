@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.0";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.1";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -295,7 +295,16 @@ function bits_backup_update_account() {
 }
 
 function bits_anybackup_admin_notice(){
-  $current_page = $_GET['page'];
+  $current_page = "";
+  if(isset($_GET) && isset($_GET['page'])) {
+    $current_page = $_GET['page'];
+  }
+  if(isset($_GET) && isset($_GET['bits_anybackup_dismiss'])) {
+    add_option("bits_anybackup_dismiss_initial_notice", true);
+  }
+  if(get_option("bits_anybackup_dismiss_initial_notice") == true) {
+    return;
+  }
   if($current_page != 'backup_bits_anybackup') {
 ?>
    <div class="update-nag">
@@ -308,6 +317,9 @@ function bits_anybackup_admin_notice(){
       <p>
         Your site is now being backed up.  
         <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>Register</a> to access your backups in an emergency.
+      </p>
+      <p>
+      <a href='<?php echo add_query_arg(array('bits_anybackup_dismiss' => true),  $_SERVER["REQUEST_URI"] ); ?>'> Dismiss this notice </a>
       </p>
     </div>
 <?php
