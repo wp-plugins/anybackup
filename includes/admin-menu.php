@@ -253,7 +253,21 @@
 
   </div>
   <div style="clear:both"></div>
-  <div id='dashboard'>
+
+  <div ng-show='loading'>
+    <div class="col-md-10 col-sm-12 pull-left logo-section">
+      <div class='logo-container'>
+        <span class='icon-96'><img src="<?php echo plugins_url("anybackup/plugin-assets/logo-512x512.png"); ?>"/></span>
+      </div>
+      <span class='branding'>
+        <h1 id='brand-name'>AnyBackup</h1>
+      </span>
+      <h1><i class='fa fa-spinner fa-pulse'></i></h1>
+    </div>
+    <div style="clear:both"></div>
+  </div>
+ 
+  <div id='dashboard' ng-hide='loading'>
     <div class="row">
 
       <div class="col-md-2 col-sm-12 right-align pull-right top-section" ng-show="email == null && status_known">
