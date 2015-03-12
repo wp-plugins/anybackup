@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.1.16
+ * Version: 1.2.0
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.1.16";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.0";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -44,11 +44,17 @@ add_action("wp_ajax_bits_force_cancel", "bits_force_cancel");
 
 add_action( 'admin_enqueue_scripts', 'bits_load_scripts');
 add_action( 'admin_init', 'bits_init');
+
+add_action('admin_notices', 'bits_anybackup_admin_notice');
+
 function bits_anybackup_activation() {
-  //TODO: Record activation stas
-  bits_get_api();
+  $api = bits_get_api();
+  $api->activate();
+  bits_start_backup_wp_cron();
 }
 function bits_anybackup_deactivation() {
+  $api = bits_get_api();
+  $api->deactivate();
 }
 
 function bits_init() {
@@ -287,5 +293,26 @@ function bits_backup_update_account() {
   $update = $api->update_account($_REQUEST["plan_id"], $_REQUEST["token"]);
   die($api->json($update));
 }
+
+function bits_anybackup_admin_notice(){
+  $current_page = $_GET['page'];
+  if($current_page != 'backup_bits_anybackup') {
+?>
+   <div class="update-nag">
+     <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>
+        <h3> 
+          <img src="<?php echo plugins_url("anybackup/plugin-assets/logo-512x512.png"); ?>" style='width:24px;height:24px;float:left;margin-right:6px;'/>
+          AnyBackup
+        </h3>
+      </a> 
+      <p>
+        Your site is now being backed up.  
+        <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>Register</a> to access your backups in an emergency.
+      </p>
+    </div>
+<?php
+  }
+}
+
 
 ?>
