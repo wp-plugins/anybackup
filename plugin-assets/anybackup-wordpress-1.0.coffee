@@ -65,9 +65,6 @@ app.controller "BitsSettingsModal", ($scope, $http, $modalInstance) ->
       setTimeout updateStatus, 1
       if(data.status == 200)
         $modalInstance.dismiss('complete')
-      else
-        console.error("Did not save site")
-        console.error(data)
 
         # TODO: error handling?
 
@@ -80,7 +77,7 @@ app.controller "BitsSupportModal", ($scope, $http, $modalInstance, $modal) ->
   $scope.upgradeToPaid = ->
     $modalInstance.dismiss('cancel')
     content = angular.element('#upgradeModal').html()
-    console.log $modal.open({
+    $modal.open({
       template: content,
       controller: 'BitsUpgradeModal',
       size: 'lg'
@@ -100,13 +97,10 @@ app.controller "BitsSupportModal", ($scope, $http, $modalInstance, $modal) ->
       params: data
     }
     request.success (data, status, headers, config) =>
-      console.log data
       if(data.status == 200)
         setTimeout supportMessage, 1
         $modalInstance.dismiss('complete')
       else
-        console.error("Did not send support")
-        console.error(data)
         $scope.error = data
 
         # TODO: error handling?
@@ -121,16 +115,9 @@ app.controller "BitsUpgradeModal", ($scope, $http, $modalInstance) ->
       }
     }
     request.success (data, status, headers, config) =>
-      console.log "Success"
-      console.log(data)
       $scope.plans = data.plans
-      
-    request.error (data, status, headers, config) =>
-      console.log "error"
-      console.error("Request to bits_load_plans_failed!") # TODO - error reporting?
 
   $scope.loadPlans()
-  console.log("Loading plans")
 
 
   $scope.getStripeToken = () ->
@@ -164,13 +151,9 @@ app.controller "BitsUpgradeModal", ($scope, $http, $modalInstance) ->
     request.success (data, status, headers, config) =>
       $scope.status = data.status
       setTimeout planChanged, 1
-      console.log("SUCCESSED",data)
 
     request.error (data, status, headers, config) =>
       $scope.status = 500
-      console.log "error"
-      console.error("Request to bits_update_account failed!") # TODO - error reporting?
-      console.log(data)
 
 
   $scope.openCheckout = (plan) ->
@@ -207,15 +190,9 @@ app.controller "BitsLoginModal", ($scope, $http, $modalInstance) ->
       if(data.status == 200)
         setTimeout updateEmail(data.email), 1
         $modalInstance.dismiss('complete')
-        console.log("closeModal")
-      console.log "Success"
-      console.log(data)
 
     request.error (data, status, headers, config) =>
       $scope.status = 500
-      console.log "error"
-      console.error("Request to bits_login_account failed!") # TODO - error reporting?
-      console.log(data)
 
     false
 
@@ -236,20 +213,15 @@ app.controller "BitsRegistrationModal", ($scope, $modalInstance, $http) ->
       params: data
     }
     request.success (data, status, headers, config) =>
-      console.log "Success"
-      console.log(data)
       if(data.status == 200)
         if(data.error)
           $scope.error = data.error
         else
           setTimeout updateEmail(data.email), 1
           $modalInstance.dismiss('complete')
-          console.log("closeModal")
 
     request.error (data, status, headers, config) =>
-      console.log "error"
       $scope.error = "Error communicating with server"
-      console.error("Request to bits_register_account failed!") # TODO - error reporting?
 
 
 
@@ -257,14 +229,10 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
   $scope.selectedCalendarDate = new Date()
   $scope.format = 'dd-MMMM-yyyy'
   $scope.backups = []
+  $scope.loading = true
   $scope.plans = ['free', 'professional']
 
-  $scope.changePlanDebug = (element) ->
-    console.log(element, "toggle")
-
   $scope.setInitialNextRunTimestamp = (timestamp) ->
-    console.log 'set initial'
-    console.log timestamp
     if(timestamp.length > 0) 
       $scope.state = 'enabled'
     else
@@ -276,7 +244,6 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
   }
 
   $scope.updateBackupsForChosenDay = ->
-    console.log("doing ajax")
     request = $http {
       url: ajaxurl, 
       method: "GET",
@@ -286,13 +253,10 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
       }
     }
     request.success (data, status, headers, config) =>
-      console.log "Success"
-      console.log(data)
       $scope.backups = data.backups
+      $scope.loading = false
       
-    request.error (data, status, headers, config) =>
-      console.log "error"
-      console.error("Request to bits_backup_for_date failed!") # TODO - error reporting?
+    #request.error (data, status, headers, config) =>
 
 
   $scope.selectBackup = (backup) ->
@@ -306,13 +270,9 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
       }
     }
     request.success (data, status, headers, config) =>
-      console.log "Success"
-      console.log(data)
       $scope.selectedBackup = data
       
-    request.error (data, status, headers, config) =>
-      console.log "error"
-      console.error("Request to bits_backup_get_backup failed!") # TODO - error reporting?
+    #request.error (data, status, headers, config) =>
 
 
   $scope.open = ($event) ->
@@ -322,7 +282,7 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
 
   $scope.openSettings = ->
     content = angular.element('#settingsModal').html()
-    console.log $modal.open({
+    $modal.open({
       template: content,
       controller: 'BitsSettingsModal',
       size: 'sm'
@@ -331,7 +291,7 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
 
   $scope.openSupport = ->
     content = angular.element('#supportModal').html()
-    console.log $modal.open({
+    $modal.open({
       template: content,
       controller: 'BitsSupportModal',
       size: 'sm'
@@ -339,21 +299,21 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
 
   $scope.openUpgrade = ->
     content = angular.element('#upgradeModal').html()
-    console.log $modal.open({
+    $modal.open({
       template: content,
       controller: 'BitsUpgradeModal',
       size: 'lg'
     })
   $scope.openLogin = ->
     content = angular.element('#loginModal').html()
-    console.log $modal.open({
+    $modal.open({
       template: content,
       controller: 'BitsLoginModal',
       size: 'sm'
     })
   $scope.openRegister = ->
     content = angular.element('#registrationModal').html()
-    console.log $modal.open({
+    $modal.open({
       template: content,
       controller: 'BitsRegistrationModal',
       size: 'sm'
@@ -407,8 +367,8 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
       method: "post",
       params: data
     }
-    request.success ->
-      console.log("SUCCESS")
+    #request.success ->
+
     $scope.step_description = "Starting restore.  You can cancel at any step."
 
   $scope.cancel = () ->
@@ -471,14 +431,10 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
           $scope.step_description = "Your next backup starts #{readable_time}.  "
         
 
-    request.error (data, status, headers, config) =>
-      console.log "error"
-      console.error("Request to bits_backup_get_status failed!") # TODO - error reporting?
 
   setInterval($scope.updateStatus, 7000)
   $scope.updateStatus()
 
   $scope.status = "Loading"
   $scope.step_number = -1
-  console.log("Updating backup")
   $scope.updateBackupsForChosenDay()
