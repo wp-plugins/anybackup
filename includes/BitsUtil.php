@@ -16,6 +16,9 @@ class BitsUtil {
         return array();
       }
 
+      if(!is_readable($path)) {
+        return array();
+      }
       if(!is_dir($path)) {
         return array($path);
       }
