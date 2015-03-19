@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.4
+ * Version: 1.2.5
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.4";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.5";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -132,11 +132,21 @@ function bits_anybackup_menu_render() {
   }
 }
 
+add_filter('cron_schedules', 'add_scheduled_interval');
+ 
+// add once 5 minute interval to wp schedules
+function add_scheduled_interval($schedules) {
+
+  $schedules['minutes_5'] = array('interval'=>300, 'display'=>'Once every 5 minutes');
+
+  return $schedules;
+}
+
 function bits_start_backup_wp_cron() {
   $timestamp = wp_next_scheduled( 'bits_iterate_backup' );
 
   if( $timestamp == false ){
-    wp_schedule_event( time()+3600, 'hourly', 'bits_iterate_backup' );
+    wp_schedule_event( time()+300, 'minutes_5', 'bits_iterate_backup' );
   }
   wp_schedule_single_event(time(), 'bits_user_initiated_backup');
 
