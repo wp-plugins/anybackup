@@ -118,7 +118,7 @@
      *  It could be a restore, a backup, or neither.
      **/
     function next_step() {
-      return $this->call_api("GET", "steps/next", array("process_id" => getmypid()));
+      return $this->call_api("GET", "steps/next", array());
     }
 
     /**
@@ -129,7 +129,7 @@
     }
 
     function complete_step($step_id) {
-      return $this->call_api("POST", "steps/$step_id/complete", array("process_id" => getmypid()));
+      return $this->call_api("POST", "steps/$step_id/complete", array());
     }
 
     /**
@@ -948,7 +948,7 @@
      * $data is an array("param" => "value") which will map to index.php?param=value
      * or in the case of a POST, will be added to the body.
      */
-    function call_api($method, $path, $data = false, $headers = array())
+    function call_api($method, $path, $data = array(), $headers = array())
     {
       if($this->api_key == null && $path != "site_servers") {
         trigger_error("Error: API key is not initialized.  You must call set_api_key before calling api method($method $path).", E_USER_ERROR);
@@ -959,6 +959,7 @@
       }
       $url = $this->get_server()."/v".self::API_VERSION."/".$path;
       $json = new Services_JSON();
+      $headers["PROCESS_ID"] = getmypid();
 
       $response = $this->raw_call_http($method, $url, $data, $headers);
       if(is_wp_error($response)) {
