@@ -60,8 +60,11 @@ For developers, our backup process is detailed in the [AnyBackup API](https://an
 
 == Screenshots ==
 
-* A brand new install.
-* Your site, backing up.
+* A backup running
+* A backup finalizing
+* Login screen
+* Showing a backup
+* Restoring a site
 
 == Docs & Support ==
 
