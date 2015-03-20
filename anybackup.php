@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.5
+ * Version: 1.2.6
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.5";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.6";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -325,11 +325,15 @@ function bits_anybackup_admin_notice(){
         </h3>
       </a> 
       <p>
-        Your site is now being backed up.  
-        <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>Register</a> to access your backups in an emergency.
+        AnyBackup is carefully preparing your first backup. 
+        <br>
+        <br>
+        This may take a while, your site performance will not be impacted.  
       </p>
       <p>
-      <a href='<?php echo add_query_arg(array('bits_anybackup_dismiss' => true),  $_SERVER["REQUEST_URI"] ); ?>'> Dismiss this notice </a>
+      <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>Preferences</a>
+      | 
+      <a href='<?php echo add_query_arg(array('bits_anybackup_dismiss' => true),  $_SERVER["REQUEST_URI"] ); ?>'> Dismiss </a>
       </p>
     </div>
 <?php
