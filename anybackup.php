@@ -3,17 +3,18 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.6
+ * Version: 1.2.7
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.6";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.7";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
 }
+
 
 require(dirname(__FILE__).'/includes/BitsAnyBackupAPI.php');
 require(dirname(__FILE__).'/includes/BitsBackupStateMachine.php');
@@ -289,6 +290,15 @@ function bits_backup_get_plans() {
 }
 
 function bits_restore_from_backup() {
+  $bits_required_permissions = array('manage_options', 'update_core', 'update_plugins', 'update_themes', 'upload_files');
+  foreach($bits_required_permissions as $permission) {
+    if(!current_user_can($permission)) {
+      $api->log("info", "Restore called without permission");
+      exit("You do not have permission to administrate this site.  Missing permission '$permission'.  Please use this plugin with an admin user.");
+    }
+  }
+
+
   bits_create_restore($_REQUEST["id"]);
   die("OK");
 }
