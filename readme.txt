@@ -4,7 +4,7 @@ Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, 
 Requires at least: 3.5.2
 Tested up to: 4.1.1
 License: MIT
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -16,10 +16,10 @@ One-click backup and restore in the cloud.  No configuration required.  Free per
 
 Our unique features:
 
+*  Live preview.  Easily test your offsite backups before there's an emergency.
 *  Free for personal use
 *  One price, full product.  No microtransactions or addon-fees
 *  No limits on restores, backups, or storage space
-*  Live preview lets you test your backup anytime
 *  Zero-downtime restore
 *  One click migrations for switching hosts
 *  Works on low-memory VPS shared environments
@@ -68,23 +68,17 @@ For developers, our backup process is detailed in the [AnyBackup API](https://an
 
 == Docs & Support ==
 
-Unique features include:
+Support is available in 3 forms:
 
-* One button backup and backup-scheduling
-* Works on low memory shared hosts and VPS servers
-* No setup
-* Zero-downtime restore
-* One-click live preview
-* Unlimited backup and restore
-* Free for personal use
-* Urgent, responsive support for paid users
-* Restores are always available for all users.  We never hold your data hostage.
+* Through our <a href='https://anybackup.io/help'>help documentation</a>
+* On the support forum
+* Within the app under the 'Support' link
 
 = Requirements =
 
 * Supports php 4 and above
 * Supported on wordpress 4 and above
-* Multisite and BuddyPress support available for premium users
+* Multisite and BuddyPress support available for premium users(contact us)
 
 
 == Services used ==
@@ -96,6 +90,11 @@ AnyBackup for Wordpress uses:
 
 
 == Changelog ==
+
+=1.2.9=
+
+* Documentation - help section
+* Reduce plugin size
 
 =1.2.7=
 
