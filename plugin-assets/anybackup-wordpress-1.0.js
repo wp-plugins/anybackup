@@ -497,7 +497,7 @@
         }
       });
       $scope.calls = 0;
-      return request.success((function(_this) {
+      request.success((function(_this) {
         return function(data, status, headers, config) {
           var readable_time;
           $scope.email = data.email;
@@ -534,8 +534,13 @@
           }
         };
       })(this));
+      return request["finally"](function() {
+        if ($scope.updateStatusTimeout) {
+          clearTimeout($scope.updateStatusTimeout);
+        }
+        return $scope.updateStatusTimeout = setTimeout($scope.updateStatus, 7000);
+      });
     };
-    setInterval($scope.updateStatus, 7000);
     $scope.updateStatus();
     $scope.status = "Loading";
     $scope.step_number = -1;

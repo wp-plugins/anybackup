@@ -869,7 +869,16 @@
       return "https://s3.amazonaws.com/any-backup/".$sha1;
     }
 
-
+    function raw_call_http_retry($times, $method, $url, $data, $headers) {
+      $retries = 1;
+      $response = $this->raw_call_http($method, $url, $data, $headers);
+      while(is_wp_error($response) && $retries < $times) {
+        sleep(pow(2,$retries+1));
+        $response = $this->raw_call_http($method, $url, $data, $headers);
+        $retries += 1;
+      }
+      return $response;
+    }
     function raw_call_http($method, $url, $data, $headers) {
       $request = null;
       if(isset($GLOBALS["BITS_DEBUG"]) && $GLOBALS["BITS_DEBUG"]) {
@@ -961,7 +970,7 @@
       $json = new Services_JSON();
       $headers["PROCESS_ID"] = getmypid();
 
-      $response = $this->raw_call_http($method, $url, $data, $headers);
+      $response = $this->raw_call_http_retry(3, $method, $url, $data, $headers);
       if(is_wp_error($response)) {
         return $response;
       }
