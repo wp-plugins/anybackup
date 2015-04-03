@@ -431,8 +431,11 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
           $scope.step_description = "Your next backup starts #{readable_time}.  "
         
 
+    request.finally ->
+      clearTimeout($scope.updateStatusTimeout) if $scope.updateStatusTimeout
+      $scope.updateStatusTimeout = setTimeout($scope.updateStatus, 7000)
 
-  setInterval($scope.updateStatus, 7000)
+
   $scope.updateStatus()
 
   $scope.status = "Loading"
