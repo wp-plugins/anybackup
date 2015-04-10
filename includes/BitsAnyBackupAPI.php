@@ -13,13 +13,9 @@
     }
 
     function get_server() {
-      if(isset($GLOBALS["BITS_ENVIRONMENT"]) && $GLOBALS["BITS_ENVIRONMENT"] == "TEST") {
-        return "http://localhost:3000";
-      }
       if(isset($GLOBALS["BITS_ANYBACKUP_SERVER"])) {
         return $GLOBALS["BITS_ANYBACKUP_SERVER"];
       }
-      //return "http://localhost:3000";
       return "https://anybackup.io";
     }
     
@@ -547,12 +543,11 @@
         return $this->get_file_type($file);
       }
       if($blob['status'] == 200) {
-        return $blob['url'];
+        return $blob['fingerprint'];
       }
       if($blob['status'] != 404) {
-        var_dump($blob);
-        # TODO: Server problem!  Handle this edge case (alert us?)
-        return "ERROR";
+        $status = $blob['status'];
+        return new WP_Error("unknown-blob-status", "file $file returned unknown status $status");
       }
 
       if(!is_readable($file)) {
@@ -575,8 +570,7 @@
       if(is_wp_error($uploaded)) {
         return $uploaded;
       }
-      #TODO: edge case: upload failure
-      return $uploaded['url'];
+      return $uploaded['fingerprint'];
     }
 
     function upload_small_file($file, $blob) {
@@ -650,7 +644,7 @@
      * $files takes the form:
      * array(
      *   array(
-     *     "/path/to/file" => "http://uploaded.file.url"
+     *     "/path/to/file" => "content_fingerprint"
      *   )
      * )
      *
@@ -734,11 +728,6 @@
       }
       $mode = fileperms($path);
       $type = $this->get_file_type($path);
-      if($type == "file") {
-        $sha1 = sha1_file($path);
-      } else {
-        $sha1 = null;
-      }
       return array(
         "ctime" => $ctime,
         "type" => $type,
@@ -746,11 +735,10 @@
         "user" => $user,
         "mtime" => $mtime,
         "path" => $path,
-        "mode" => $mode,
-        "content_fingerprint" => $sha1
+        "mode" => $mode
       );
     }
-    private function metadata_for_file($path, $url) {
+    private function metadata_for_file($path, $content_fingerprint) {
       $result = $this->get_file_metadata($path);
       $type = $result['type'];
       if($type == "directory") {
@@ -759,12 +747,10 @@
         //TODO: investigate why this has /anybackup/
         //WARNING:  The order here matters
         $result["size"]=filesize($path);
+        $result["content_fingerprint"]=$content_fingerprint;
         $result["fingerprint"] = sha1($this->json($result));
-        $result["url"]=$url;
       }
-      $fingerprint = $result["fingerprint"];
       
-      //echo "'$fingerprint' - ".$result['path']." - url($url) type($type)<br>";
       return $result;
     }
     
@@ -860,13 +846,7 @@
         return new WP_Error("file-doesnt-exist", "Could not get details for '$file'");
       }
       $sha1 = sha1_file($file);
-      $url = $this->get_content_url_for_file($sha1);
-      $content_fingerprint = array("content_fingerprint" => $sha1);
-      return array_merge($this->metadata_for_file($file, $url), $content_fingerprint);
-    }
-
-    private function get_content_url_for_file($sha1) {
-      return "https://s3.amazonaws.com/any-backup/".$sha1;
+      return $this->metadata_for_file($file, $sha1);
     }
 
     function raw_call_http_retry($times, $method, $url, $data, $headers) {
