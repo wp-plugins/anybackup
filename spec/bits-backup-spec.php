@@ -1,5 +1,5 @@
 <?php
-  $GLOBALS["BITS_ENVIRONMENT"]="TEST";
+  $GLOBALS["BITS_ANYBACKUP_SERVER"]="http://localhost:3000";
   $WP_PATH=BitsUtil::fs_get_wp_config_path();
 
   global $wpdb;
@@ -151,6 +151,46 @@ function fail($obj) {
     </td>
   </tr>
 
+   <tr>
+    <td>API upload_files return fingerprints</td>
+    <td>
+      <?php
+        file_put_contents($WP_PATH."/tmpfile", substr(md5(rand()), 0, 7));
+        $files = array($WP_PATH."/tmpfile");
+        $sha1 = sha1_file($files[0]);
+        $results = $api->upload_files($files, 0, BitsUtil::fs_get_wp_config_path());
+        if(
+          count($results) == count($files) &&
+          reset($results) == $sha1
+        ) { pass(); } else { fail($results); };
+      ?>
+    </td>
+  </tr>
+ 
+   <tr>
+    <td>API content_fingerprint that is passed in is used by add_files_to_backup</td>
+    <td>
+      <?php
+        $backup = create_backup($api, array( "test" => "true" ));
+
+        file_put_contents($WP_PATH."/tmpfile", substr(md5(rand()), 0, 7));
+        $files = array($WP_PATH."/tmpfile");
+        $sha1 = sha1_file($files[0]);
+        $results = $api->upload_files($files, 0, BitsUtil::fs_get_wp_config_path());
+
+        file_put_contents($WP_PATH."/tmpfile", substr(md5(rand()), 0, 7));
+
+        $files = $results;
+
+        $result = $api->add_files_to_backup($backup['id'], $files);
+
+        if(
+          count($result["files"]) == 1
+        ) { pass(); } else { fail($result); };
+      ?>
+    </td>
+  </tr>  
+
   <tr>
     <td>API handles sym links</td>
     <td>
@@ -252,7 +292,7 @@ function fail($obj) {
           $files = array();
           $result = $api->restore_file_operations($restore['id'], $files);
           if(!is_wp_error($result) && $result == []) { pass(); } else { fail($result); };
-      ?>
+?>
     </td>
   </tr> <tr>
     <td>API restore swap schema operations</td>
