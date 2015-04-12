@@ -879,6 +879,7 @@
       if(!isset($headers["Content-Type"]) || $headers["Content-Type"] == null) {
         $headers["Content-Type"] = "application/json";
         $headers["Accept"] = "application/json";
+        $headers["Accept-Encoding"] = "gzip";
         if($method == "POST") {
           $data = $this->json($data);
         }
@@ -889,7 +890,7 @@
       switch ($method)
       {
           case "POST":
-            $request = wp_remote_post($url, array( "body" => $data, "headers" => $headers, "timeout" => $timeout ));
+            $request = wp_remote_post($url, array( "body" => $data, "compress" => true, "headers" => $headers, "timeout" => $timeout ));
             break;
           case "GET":
             if ($data)
