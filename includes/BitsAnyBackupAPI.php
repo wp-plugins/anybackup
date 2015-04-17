@@ -373,6 +373,25 @@
       return $this->call_api("GET", "backups/$id");
     }
 
+     /**
+     *
+     * Sets the name of a backup
+     *
+     * $id - the id of the backup
+     * $args - the fields to update.  Any missing fields will not be updated.
+     *
+     * $args example:
+     * array(
+     *  "name => "new backup name"
+     * )
+      */
+     function update_backup($id, $args) {
+      if($id == null) {
+        return new WP_Error('invalid api usage', "Need an id when calling get_backup");
+      }
+      return $this->call_api("POST", "backups/$id/update", $args);
+    }
+
     /**
      * Used internally
      */

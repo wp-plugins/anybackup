@@ -273,6 +273,25 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
       $scope.selectedBackup = data
       
     #request.error (data, status, headers, config) =>
+  $scope.editName = () ->
+    $scope.editingName=true
+    focus = ->
+      angular.element("#edit-name")[0].focus()
+    window.setTimeout focus, 1
+
+  $scope.saveName = () ->
+    $scope.editingName=false
+    request = $http {
+      url: ajaxurl, 
+      method: "GET",
+      params: {
+        action: "bits_backup_update_backup",
+        id: $scope.selectedBackup.id
+        name: $scope.selectedBackup.name
+      }
+    }
+    request.success (data, status, headers, config) =>
+      console?.log("Updated name.")
 
 
   $scope.open = ($event) ->
