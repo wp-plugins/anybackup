@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.12
+ * Version: 1.2.13
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.12";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.13";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -32,6 +32,7 @@ add_action("wp_ajax_bits_backup_save_settings", "bits_backup_save_settings");
 add_action("wp_ajax_bits_backup_force_backup_now", "bits_backup_force_backup_now");
 add_action("wp_ajax_bits_backup_get_status", "bits_backup_get_status");
 add_action("wp_ajax_bits_backup_get_backup", "bits_backup_get_backup");
+add_action("wp_ajax_bits_backup_update_backup", "bits_backup_update_backup");
 add_action("wp_ajax_bits_backup_get_sites", "bits_backup_get_sites");
 add_action("wp_ajax_bits_backup_get_plans", "bits_backup_get_plans");
 add_action("wp_ajax_bits_backup_send_support", "bits_backup_send_support");
@@ -277,6 +278,13 @@ function bits_backup_get_backup() {
   $backup = $api->get_backup($_REQUEST["id"]);
 
   die($api->json($backup));
+}
+
+function bits_backup_update_backup() {
+  $api = bits_get_api();
+  
+  $args = array("name" => $_REQUEST["name"]);
+  die($api->update_backup($_REQUEST["id"], $args));
 }
 
 function bits_backup_get_sites() {

@@ -397,11 +397,16 @@
         <table class='table table-striped table-hover' ng-show='backups.length > 0'>
           <tbody>
             <tr>
-              <th class='id'>#</th>
+              <th class='name'>Name</th>
               <th>Created</th>
             </tr>
             <tr ng-repeat="backup in backups" ng-click='selectBackup(backup)' class='selectable' ng-class='(selectedBackup.id == backup.id) ? "selectedRow" : ""'>
-              <td>{{backup.id}}</td>
+              <td ng-if="backup.id == selectedBackup.id">
+                {{selectedBackup.name}}
+              </td>
+              <td ng-if="backup.id != selectedBackup.id">
+                {{backup.name}}
+              </td>
               <td>{{readableDate(backup)}} <i class="fa fa-angle-right"></i> </td>
             </tr>
           </tbody>
@@ -409,7 +414,13 @@
       </div>
 
       <div class='detail col-md-4 col-sm-4 backup-info' ng-show='selectedBackup'>
-        <div class="title"> Backup {{selectedBackup.id}} </div>
+        <div ng-show="editingName" class="title">
+          <form ng-submit='saveName()'>
+            <input id='edit-name' ng-model='selectedBackup.name'></input>
+            <input type='submit'></input>
+          </form>
+        </div>
+        <div class="title" ng-hide='editingName'>{{selectedBackup.name}} <a ng-click="editName()"><i class="fa fa-pencil"></i></a> </div>
         <form method="POST">
           <div class='row backup-details'>
             <div class='col-md-3 col-sm-3'>

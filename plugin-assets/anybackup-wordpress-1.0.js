@@ -361,6 +361,32 @@
         };
       })(this));
     };
+    $scope.editName = function() {
+      var focus;
+      $scope.editingName = true;
+      focus = function() {
+        return angular.element("#edit-name")[0].focus();
+      };
+      return window.setTimeout(focus, 1);
+    };
+    $scope.saveName = function() {
+      var request;
+      $scope.editingName = false;
+      request = $http({
+        url: ajaxurl,
+        method: "GET",
+        params: {
+          action: "bits_backup_update_backup",
+          id: $scope.selectedBackup.id,
+          name: $scope.selectedBackup.name
+        }
+      });
+      return request.success((function(_this) {
+        return function(data, status, headers, config) {
+          return typeof console !== "undefined" && console !== null ? console.log("Updated name.") : void 0;
+        };
+      })(this));
+    };
     $scope.open = function($event) {
       $event.preventDefault();
       $event.stopPropagation();
