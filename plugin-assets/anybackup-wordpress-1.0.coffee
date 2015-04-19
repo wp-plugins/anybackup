@@ -175,6 +175,7 @@ app.controller "BitsLoginModal", ($scope, $http, $modalInstance) ->
     $modalInstance.dismiss('cancel')
 
   $scope.loginAccount = ->
+    $scope.loginFormSubmitting=true
     data = {
         action: "bits_login_account",
         email: $scope.email_input,
@@ -187,11 +188,13 @@ app.controller "BitsLoginModal", ($scope, $http, $modalInstance) ->
     }
     request.success (data, status, headers, config) =>
       $scope.status = data.status
+      $scope.loginFormSubmitting=false
       if(data.status == 200)
         setTimeout updateEmail(data.email), 1
         $modalInstance.dismiss('complete')
 
     request.error (data, status, headers, config) =>
+      $scope.loginFormSubmitting=false
       $scope.status = 500
 
     false
@@ -201,6 +204,7 @@ app.controller "BitsRegistrationModal", ($scope, $modalInstance, $http) ->
   $scope.dismiss = ->
     $modalInstance.dismiss('cancel')
   $scope.registerUser = ->
+    $scope.registerFormSubmitting=true
 
     data = {
         action: "bits_register_account",
@@ -215,12 +219,14 @@ app.controller "BitsRegistrationModal", ($scope, $modalInstance, $http) ->
     request.success (data, status, headers, config) =>
       if(data.status == 200)
         if(data.error)
+          $scope.registerFormSubmitting=false
           $scope.error = data.error
         else
           setTimeout updateEmail(data.email), 1
           $modalInstance.dismiss('complete')
 
     request.error (data, status, headers, config) =>
+      $scope.registerFormSubmitting=false
       $scope.error = "Error communicating with server"
 
 
