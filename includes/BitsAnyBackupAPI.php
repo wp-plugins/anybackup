@@ -160,6 +160,12 @@
       if(defined("WP_LANG_DIR")) {
         $wp_lang_dir = WP_LANG_DIR;
       }
+      $curl_exists = function_exists('curl_version');
+      if($curl_exists) {
+        $curl_version = curl_version();
+      } else {
+        $curl_version = null;
+      }
       //TODO any of these arrays?
       $upload_dir = wp_upload_dir();
       if(isset($upload_dir['basedir'])) {
@@ -180,6 +186,7 @@
         "gzip" => function_exists("gzencode"),
         "bzip2" => function_exists("bzcompress"),
         "native_json_support" => function_exists("json_encode"),
+        "curl_version" => $curl_version,
         "paths" => array(
           "wp-config.php" => $wp_config_php_path,
           "wp-content" => $content_path,
@@ -909,14 +916,14 @@
       switch ($method)
       {
           case "POST":
-            $request = wp_remote_post($url, array( "body" => $data, "compress" => true, "headers" => $headers, "timeout" => $timeout ));
+            $request = bits_remote_post($url, array( "body" => $data, "compress" => true, "headers" => $headers, "timeout" => $timeout ));
             break;
           case "GET":
             if ($data)
               $url_with_params = sprintf("%s?%s", $url, http_build_query($data));
             else
               $url_with_params = $url;
-            $request = wp_remote_get($url_with_params, array("headers" => $headers, "timeout" => $timeout ));
+            $request = bits_remote_get($url_with_params, array("headers" => $headers, "timeout" => $timeout ));
       }
 
       if(is_wp_error($request)) {
@@ -1008,6 +1015,14 @@
         return array_map(array($this, "recurse_translate_object_to_array"), $obj);
       }
       return $obj;
+    }
+
+    function download_url($url, $destination, $timeout=300) {
+      # from https://core.trac.wordpress.org/browser/tags/4.2/src/wp-admin/includes/file.php#L0
+      # download_url writes to a temporary file and then returns that file.
+      #
+      # TODO: all the checks they do
+      return bits_remote_get($url, array( 'timeout' => $timeout, 'stream' => true, 'filename' => $destination ));
     }
 
   }

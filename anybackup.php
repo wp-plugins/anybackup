@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.14
+ * Version: 1.2.15
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.14";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.15";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -22,6 +22,7 @@ require(dirname(__FILE__).'/includes/BitsRestoreStateMachine.php');
 require(dirname(__FILE__).'/includes/BitsUtil.php');
 require(dirname(__FILE__).'/includes/BitsBackupWorker.php');
 require(dirname(__FILE__).'/includes/BitsRestoreWorker.php');
+require(dirname(__FILE__).'/includes/class-persistent-http.php');
 
 register_activation_hook( __FILE__, 'bits_anybackup_activation');
 register_deactivation_hook( __FILE__, 'bits_anybackup_deactivation');

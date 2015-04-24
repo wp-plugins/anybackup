@@ -58,18 +58,14 @@
 
         @mkdir(dirname($download["filename"]), 0777, true);
         $permfile = $download["filename"];
-        $tmpfile = download_url( $url, $timeout = 3000 );
-        if(is_wp_error($tmpfile)) {
-          echo "Encountered an error downloading $permfile\n";
-          var_dump($tmpfile);
-          return $tmpfile;
+        error_log("Downloading $url");
+        $result = $this->api->download_url( $url, $permfile, $timeout = 3000 );
+        if(is_wp_error($result)) {
+          echo "Encountered an error downloading $permfile from $url\n";
+          return $result;
         } else {
-          if(!rename( $tmpfile, $permfile )) {
-            echo "Rename failed!\n";
-            return new WP_Error("download-failed", "Could not rename $tmpfile to $permfile!");
-          }
           if(!file_exists($permfile)) {
-            return new WP_Error("downloaded-file-missing", "Rename completed but file does not exist at $permfile");
+            return new WP_Error("downloaded-file-missing", "Download completed but file does not exist at $permfile");
           }
         }
       }
