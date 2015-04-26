@@ -1022,7 +1022,8 @@
       # download_url writes to a temporary file and then returns that file.
       #
       # TODO: all the checks they do
-      return bits_remote_get($url, array( 'timeout' => $timeout, 'stream' => true, 'filename' => $destination ));
+      $headers['Authorization']="Token ".$this->api_key;
+      return bits_remote_get($url, array( 'timeout' => $timeout, 'stream' => true, "compress" => true, "decompress" => true, 'filename' => $destination, 'headers' => $headers ));
     }
 
   }
