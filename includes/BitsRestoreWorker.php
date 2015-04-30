@@ -58,7 +58,6 @@
 
         @mkdir(dirname($download["filename"]), 0777, true);
         $permfile = $download["filename"];
-        error_log("Downloading $url");
         $result = $this->api->download_url( $url, $permfile, $timeout = 3000 );
         if(is_wp_error($result)) {
           echo "Encountered an error downloading $permfile from $url\n";

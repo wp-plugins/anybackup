@@ -2,9 +2,9 @@
 Contributors: 255bits
 Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, database, files, backups
 Requires at least: 3.5.2
-Tested up to: 4.2.0
+Tested up to: 4.2.1
 License: MIT
-Stable tag: 1.2.17
+Stable tag: 1.2.18
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -14,13 +14,12 @@ Simple backup, restore, and testing.  Free personal plan.
 
 [AnyBackup](https://anybackup.io) protects you from data loss.
 
-== Main Features ==
-
 *  Easily test your backups before there's an emergency with Live Preview.
 *  Free for personal use.
 *  No limits on restores, backups, or storage space.
 
-== Additional features ==
+
+Additionally, we support the following:
 
 *  Incremental backups
 *  Zero-downtime restore
@@ -91,6 +90,10 @@ AnyBackup for Wordpress uses:
 
 
 == Changelog ==
+
+=1.2.18=
+
+* Support wordpress 4.2.1
 
 =1.2.17=
 

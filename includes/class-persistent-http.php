@@ -218,12 +218,10 @@ class BITS_Http_Curl {
     // If streaming to a file open a file handle, and setup our curl streaming handler.
     if ( $r['stream'] ) {
       $filename = $r['filename'];
-      error_log("Opening $filename");
       if ( ! WP_DEBUG )
         $this->stream_handle = @fopen( $r['filename'], 'w+' );
       else
         $this->stream_handle = fopen( $r['filename'], 'w+' );
-      error_log("Opening as $this->stream_handle");
       if ( ! $this->stream_handle )
         return new WP_Error( 'http_request_failed', sprintf( __( 'Could not open handle for fopen() to %s' ), $r['filename'] ) );
     } else {
