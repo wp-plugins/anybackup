@@ -453,6 +453,18 @@
               {{selectedBackup.file_count}}
             </div>
           </div>
+          <div ng-repeat="(key, attributes) in selectedBackup.site_info">
+            <div style="clear:both"></div>
+            <div class='row backup-details'>
+              <div class='col-md-3 col-sm-3'>
+                {{attributes.name}}
+              </div>
+              <div class='col-md-9 col-sm-9'>
+                {{attributes.value}}
+              </div>
+            </div>
+          </div>
+
           <div style="clear:both"></div>
           <div class='row backup-details'>
             <div class='col-md-12 col-sm-12'>

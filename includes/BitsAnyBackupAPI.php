@@ -139,6 +139,13 @@
       return $this->call_api("POST", "backups", $args);
     }
 
+    /**
+     * Internal, trims out all but name, version and url from plugin.
+     */
+    function trim_plugin_info($plugin) {
+      return array("name" => $plugin["Name"], "version" => $plugin["Version"], "uri" => $plugin["PluginURI"]);
+    }
+
 
     /**
      * Internal, platform specific metadata
@@ -166,6 +173,16 @@
       } else {
         $curl_version = null;
       }
+
+
+      $plugins_installed = null;
+      if(!function_exists('get_plugins')) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+      }
+      if(function_exists('get_plugins')) {
+        $plugins_installed = array_map( array($this, "trim_plugin_info"), get_plugins());
+      }
+
       //TODO any of these arrays?
       $upload_dir = wp_upload_dir();
       if(isset($upload_dir['basedir'])) {
@@ -187,6 +204,7 @@
         "bzip2" => function_exists("bzcompress"),
         "native_json_support" => function_exists("json_encode"),
         "curl_version" => $curl_version,
+        "plugins" => $plugins_installed,
         "paths" => array(
           "wp-config.php" => $wp_config_php_path,
           "wp-content" => $content_path,

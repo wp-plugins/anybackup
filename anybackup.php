@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.18
+ * Version: 1.2.19
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.18";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.19";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -137,10 +137,10 @@ function bits_anybackup_menu_render() {
 
 add_filter('cron_schedules', 'add_scheduled_interval');
  
-// add once 5 minute interval to wp schedules
+// add once 30 minute interval to wp schedules
 function add_scheduled_interval($schedules) {
 
-  $schedules['minutes_5'] = array('interval'=>300, 'display'=>'Once every 5 minutes');
+  $schedules['minutes_30'] = array('interval'=>1800, 'display'=>'Once every 30 minutes');
 
   return $schedules;
 }
@@ -149,7 +149,7 @@ function bits_start_backup_wp_cron() {
   $timestamp = wp_next_scheduled( 'bits_iterate_backup' );
 
   if( $timestamp == false ){
-    wp_schedule_event( time()+300, 'minutes_5', 'bits_iterate_backup' );
+    wp_schedule_event( time()+1800, 'minutes_30', 'bits_iterate_backup' );
   }
   wp_schedule_single_event(time(), 'bits_user_initiated_backup');
 
@@ -169,7 +169,6 @@ function bits_create_backup(){
 add_action( 'bits_user_initiated_backup', 'bits_user_initiated_create_backup' );
 function bits_user_initiated_create_backup() {
   $api = bits_get_api();
-  $api->create_backup(array("user-initiated" => true));
   $sm = new BitsBackupStateMachine($api);
 
   $sm->run();
@@ -218,10 +217,14 @@ function bits_login_account() {
 }
 
 function bits_backup_force_backup_now() {
+  $api = bits_get_api();
+  $api->create_backup(array("user-initiated" => true));
   wp_schedule_single_event(time(), 'bits_user_initiated_backup');
   die('ok');
 }
 function bits_backup_start_job() {
+  $api = bits_get_api();
+  $api->create_backup(array("user-initiated" => true));
   bits_start_backup_wp_cron();
   die('ok');
 }
