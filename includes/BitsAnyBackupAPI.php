@@ -143,7 +143,29 @@
      * Internal, trims out all but name, version and url from plugin.
      */
     function trim_plugin_info($plugin) {
+
       return array("name" => $plugin["Name"], "version" => $plugin["Version"], "uri" => $plugin["PluginURI"]);
+    }
+
+
+    /**
+     * Filtering a array by its keys using a callback.
+     * From: https://gist.github.com/h4cc/8e2e3d0f6a8cd9cacde8
+     * 
+     * @param $array array The array to filter
+     * @param $callback Callback The filter callback, that will get the key as first argument.
+     * 
+     * @return array The remaining key => value combinations from $array.
+     */
+    function array_filter_key($callback, array $array)
+    {
+      $matchedKeys = array_filter(array_keys($array), $callback);
+
+      return array_intersect_key($array, array_flip($matchedKeys));
+    }
+
+    function select_active_plugin($key) {
+      return is_plugin_active($key);
     }
 
 
@@ -180,7 +202,8 @@
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
       }
       if(function_exists('get_plugins')) {
-        $plugins_installed = array_map( array($this, "trim_plugin_info"), get_plugins());
+        $active_plugins = $this->array_filter_key( array($this, "select_active_plugin"), get_plugins());
+        $plugins_installed = array_map( array($this, "trim_plugin_info"), $active_plugins);
       }
 
       //TODO any of these arrays?
