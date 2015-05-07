@@ -2,9 +2,9 @@
 Contributors: 255bits
 Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, database, files, backups
 Requires at least: 3.5.2
-Tested up to: 4.2.1
+Tested up to: 4.2.2
 License: MIT
-Stable tag: 1.2.20
+Stable tag: 1.2.21
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -76,8 +76,8 @@ Support is available in 3 forms:
 
 = Requirements =
 
-* Supports php 4 and above
-* Supported on wordpress 4 and above
+* Supports PHP 4 and above
+* Supported on Wordpress 4 and above
 * Multisite and BuddyPress support available for premium users(contact us)
 
 
@@ -91,6 +91,10 @@ AnyBackup for Wordpress uses:
 
 == Changelog ==
 
+=1.2.21=
+
+* Support Wordpress 4.2.2
+
 =1.2.20=
 
 * Fix backup metadata
@@ -101,14 +105,14 @@ AnyBackup for Wordpress uses:
 
 =1.2.18=
 
-* Support wordpress 4.2.1
+* Support Wordpress 4.2.1
 
 =1.2.17=
 
 * Authenticate when downloading restored files.
 
 =1.2.16= 
-* Support wordpress 4.2
+* Support Wordpress 4.2
 
 =1.2.15=
 
