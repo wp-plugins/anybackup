@@ -532,7 +532,6 @@
       request.success((function(_this) {
         return function(data, status, headers, config) {
           var readable_time;
-          console.log(data);
           $scope.email = data.email;
           $scope.status_known = true;
           $scope.backup_allowed = data.backup_allowed;
@@ -540,6 +539,7 @@
           $scope.disabled_reason = data.disabled_reason;
           $scope.previews_allowed = data.previews_allowed;
           $scope.previews_remaining = data.previews_remaining;
+          $scope.onboarding_status = data.onboarding_status;
           $rootScope.paid = data.paid;
           $rootScope.plan = data.plan;
           if (data.backup_id || data.restore_id) {

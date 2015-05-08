@@ -432,8 +432,11 @@ app.controller "BitsAnyBackupDashboard", ($scope, $http, $modal, $rootScope) ->
       $scope.disabled_reason = data.disabled_reason
       $scope.previews_allowed = data.previews_allowed
       $scope.previews_remaining = data.previews_remaining
+      $scope.onboarding_status = data.onboarding_status
       $rootScope.paid = data.paid
       $rootScope.plan = data.plan
+
+      # if backup/restore running
       if(data.backup_id || data.restore_id)
         $scope.percent_complete = data.percent_complete
         if($scope.percent_complete < 15)
