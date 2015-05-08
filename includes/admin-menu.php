@@ -315,7 +315,7 @@
 
   <div style="clear:both"></div>
 
-  <div class="row" ng-show="backups.length == 0 && !backup_running">
+  <div class="row" ng-show="onboarding_status == 'failed'">
     <div class="col-md-12">
       <h4>Oops!  Looks like there's a problem.</h4>
       <p>
