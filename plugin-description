@@ -1,0 +1,14 @@
+AnyBackup is a zero-configuration backup/restore/migrate solution.  We use the cloud heavily, along with high availability custom servers to provide constant backups and disaster recovery ability to our clients.  Additionally, we offer a free plan for single-site use.
+
+Our technology allows us to easily support many unique features:
+*  Free single-site plans
+*  No storage limits
+*  Live preview
+*  Zero-downtime restore
+*  Super low impact backups
+*  Works on low-memory VPS shared environments
+*  No configuration required
+
+We reach out to two web services:  
+* anybackup.io  - Used as a cloud service for storage of backups
+* stripe - Used for billing for premium customers 
