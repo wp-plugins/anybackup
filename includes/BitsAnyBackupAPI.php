@@ -16,7 +16,6 @@
       if(isset($GLOBALS["BITS_ANYBACKUP_SERVER"])) {
         return $GLOBALS["BITS_ANYBACKUP_SERVER"];
       }
-      return "http://localhost:3000";
       return "https://anybackup.io";
     }
     
