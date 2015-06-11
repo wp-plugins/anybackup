@@ -1,4 +1,4 @@
-<div id='debugBar' ng-hide='false'>
+<div id='debugBar' ng-hide='true'>
   <label class='pull-left'>Debug: </label>
   <form method="POST" action="#" class='pull-left'>
     <input type='hidden' name='createNewApiKey' value='true'/>
@@ -9,6 +9,3 @@
 
 
 </div>
-<div style="clear:both"></div>
-
-
