@@ -7,8 +7,6 @@ License: MIT
 Stable tag: 1.3.1
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
-WC requires at least: 2.0
-WC tested up to: 2.3.9
 
 Simple backup, restore, and testing.  Free personal plan.
 
