@@ -1,0 +1,173 @@
+.selectable {
+  cursor: pointer;
+}
+#enableBackups {
+  margin-bottom: 6px;
+}
+.selectedRow,
+.table-hover tbody tr:hover.selectedRow td,
+.table-hover tbody tr:hover.selectedRow th {
+  background: #fcf8e3 !important;
+}
+.table-striped > tbody > tr:nth-child(odd).selectedRow > td {
+  background: #fcf8e3 !important;
+}
+.selectedRow i.fa-angle-right {
+  font-weight: 800;
+  display: block;
+}
+i.fa-angle-right {
+  font-weight: 100;
+  float: right;
+  font-size: 110%;
+}
+footer.footer {
+  margin-top: 20px;
+}
+.btn.btn-premium {
+  background-color: #c02190;
+  color: #fff;
+  font-size: 0.85em;
+}
+.btn.btn-premium:hover {
+  background-color: #d825a2;
+  color: #fff;
+}
+.backup-info {
+  margin-top: 20px;
+}
+.backup-info .title {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+.backup-info form {
+  border-bottom: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+.backup-details {
+  padding: 8px;
+}
+.backup-details label {
+  font-weight: 600;
+  width: 5em;
+  float: left;
+  text-align: right;
+  margin-right: 1em;
+}
+th.id {
+  width: 1.5em;
+  text-align: center;
+}
+.plan-box.current-plan {
+  border: 1px solid #808080;
+}
+#debugBar {
+  background-color: #ff0;
+  height: 20px;
+}
+.right-align {
+  text-align: right;
+}
+.premium-nag {
+  border-left: 4px solid #c02190 !important;
+}
+.bootstrap-wrapper {
+  margin-right: 4%;
+}
+.backing-up-header {
+  margin: 0;
+}
+.premium {
+  color: #c02190;
+}
+.premium a {
+  color: #c02190;
+  font-weight: bold;
+}
+.spacer {
+  padding-top: 4px;
+  padding-bottom: 6px;
+}
+.panel.panel-free .panel-heading {
+  background-color: #808080;
+}
+.panel {
+  text-align: center;
+}
+.panel:hover {
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4), 0 1px 5px rgba(130,130,130,0.35);
+}
+.panel-body {
+  padding: 0px;
+  text-align: center;
+}
+.the-price {
+  background-color: rgba(220,220,220,0.17);
+  box-shadow: 0 1px 0 #dcdcdc, inset 0 1px 0 #fff;
+  padding: 20px;
+  margin: 0;
+}
+.the-price h1 {
+  line-height: 1em;
+  padding: 0;
+  margin: 0;
+}
+.subscript {
+  font-size: 25px;
+}
+.icon-logo {
+  float: left;
+  top: 17px;
+  margin-right: 6px;
+}
+.icon-logo img {
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+}
+h1#brand-name {
+  margin-top: 14px;
+  padding-top: 0px;
+  margin-bottom: 4px;
+}
+.vertical-divider {
+  float: left;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-right: 1px solid #ccc;
+  height: 100px;
+  position: relative;
+  top: 17px;
+}
+.logo-section {
+  margin-bottom: 5px;
+}
+.branding label {
+  font-weight: 400;
+  margin-top: 8px;
+}
+.branding .btn {
+  margin-top: 2px;
+}
+.top-section {
+  margin-top: 17px;
+  position: relative;
+}
+.no-left-padding {
+  padding-left: 0px;
+}
+.cancel-button {
+  margin-left: 2px;
+}
+.cancel-container {
+  margin-left: 4px;
+  font-size: 80%;
+}

@@ -16,6 +16,7 @@
       if(isset($GLOBALS["BITS_ANYBACKUP_SERVER"])) {
         return $GLOBALS["BITS_ANYBACKUP_SERVER"];
       }
+      return "http://localhost:3000";
       return "https://anybackup.io";
     }
     
@@ -107,6 +108,23 @@
      */
     function get_sites() {
       return $this->call_api("GET", "sites", array());
+    }
+
+    /**
+     * Returns all information about the current site
+     **/
+    function get_site() {
+      return $this->call_api("GET", "sites/current", array());
+    }
+
+    /**
+     * Set the site settings. 
+     * $options includes:
+     *  
+     * * backup_frequency_in_hours - automatic backup frequency.  -1 for never
+     **/
+    function update_site($options) {
+      return $this->call_api("POST", "sites/update", $options);
     }
 
     /**
@@ -398,8 +416,8 @@
      * Returns a list of backups
      *
      */
-    function get_backups() {
-      return $this->call_api("GET", "backups");
+    function get_backups($site_id=null) {
+      return $this->call_api("GET", "backups", array("site_id"=>$site_id));
     }
 
 

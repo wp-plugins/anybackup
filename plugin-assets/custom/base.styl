@@ -1,0 +1,170 @@
+$logo-margin-top = 17px
+$selected-color= rgb(252, 248, 227);
+//Using pallette from https://www.colorcodehex.com/2190c3/
+$premium=rgb(192,33,144)
+
+.selectable
+  cursor: pointer
+
+#enableBackups
+  margin-bottom: 6px
+
+.selectedRow, .table-hover tbody tr:hover.selectedRow td, .table-hover tbody tr:hover.selectedRow th
+  background: $selected-color !important
+.table-striped > tbody > tr:nth-child(odd).selectedRow > td
+  background: $selected-color !important
+
+.selectedRow i.fa-angle-right
+  font-weight: 800
+  display: block
+i.fa-angle-right
+  font-weight: 100
+  float: right
+  font-size: 110%
+
+footer.footer
+  margin-top: 20px
+
+.btn.btn-premium
+  background-color: $premium
+  color: white
+  font-size: 0.85em
+.btn.btn-premium:hover
+  background-color: lighten($premium, 10%)
+  color: white
+
+.backup-info
+  margin-top: 20px
+
+  .title
+    border-top 1px solid rgb(221,221,221)
+    border-bottom 1px solid rgb(221,221,221)
+    margin-top: 0
+    margin-bottom: 0
+    padding-top: 8px
+    padding-bottom: 8px
+    padding-left: 8px
+    font-size: 13px
+    font-weight: bold
+    background-color: #f9f9f9
+  form
+    border-bottom 1px solid rgb(221,221,221)
+    background-color: #f9f9f9
+
+.backup-details
+  padding: 8px
+  label
+    font-weight: 600
+    width: 5em
+    float: left
+    text-align: right
+    margin-right: 1em
+th.id
+  width 1.5em
+  text-align: center
+
+.plan-box.current-plan
+  border:1px solid grey
+
+#debugBar
+  background-color: yellow
+  height:20px
+
+.right-align
+  text-align: right
+
+  
+.premium-nag
+  border-left: 4px solid $premium !important
+
+.bootstrap-wrapper
+  margin-right: 4%
+
+.backing-up-header
+  margin: 0
+
+
+.premium
+  color: $premium
+  a
+    color: $premium
+    font-weight: bold
+.spacer
+  padding-top: 4px
+  padding-bottom:6px
+
+.panel.panel-free
+  .panel-heading
+    background-color: grey
+
+// From http://bootsnipp.com/snippets/featured/plans-and-pricing
+.panel
+  text-align center
+  &:hover
+    box-shadow 0 1px 5px rgba(0, 0, 0, 0.4), 0 1px 5px rgba(130, 130, 130, 0.35)
+
+.panel-body
+  padding 0px
+  text-align center
+
+.the-price
+  background-color rgba(220,220,220,.17)
+  box-shadow 0 1px 0 #dcdcdc, inset 0 1px 0 #fff
+  padding 20px
+  margin 0
+  h1
+    line-height 1em
+    padding 0
+    margin 0
+
+.subscript
+  font-size 25px
+
+.icon-logo
+  float: left
+  top:$logo-margin-top
+  margin-right: 6px
+  img
+    width: 24px
+    height: 24px
+    z-index: 1
+
+h1#brand-name
+  margin-top:$logo-margin-top - 3px
+  padding-top: 0px
+  margin-bottom: 4px
+
+.vertical-divider
+  float:left
+  margin-left: 20px
+  margin-right: 20px
+  border-right: 1px solid lighten(black, 80%)
+  height: 100px
+  position:relative
+  top: $logo-margin-top
+
+.logo-section
+  margin-bottom: 5px
+
+
+.branding
+  label
+    font-weight: 400
+    margin-top: 8px
+  .btn
+    margin-top: 2px
+
+.top-section
+  margin-top: $logo-margin-top
+  position:relative
+
+.no-left-padding
+  padding-left: 0px
+
+
+.cancel-button
+  margin-left: 2px
+
+.cancel-container
+  margin-left: 4px
+  font-size: 80%

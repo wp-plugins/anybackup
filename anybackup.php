@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.2.23
+ * Version: 1.3.0
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.2.23";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.3.0";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -27,10 +27,9 @@ require(dirname(__FILE__).'/includes/class-persistent-http.php');
 register_activation_hook( __FILE__, 'bits_anybackup_activation');
 register_deactivation_hook( __FILE__, 'bits_anybackup_deactivation');
 add_action('admin_menu', 'bits_anybackup_menu');
-add_action("wp_ajax_bits_backup_for_date", "bits_backup_for_date");
-add_action("wp_ajax_bits_backup_start_job", "bits_backup_start_job");
+add_action("wp_ajax_bits_backup_list", "bits_backup_list");
+add_action("wp_ajax_bits_backup_backup_now", "bits_backup_backup_now");
 add_action("wp_ajax_bits_backup_save_settings", "bits_backup_save_settings");
-add_action("wp_ajax_bits_backup_force_backup_now", "bits_backup_force_backup_now");
 add_action("wp_ajax_bits_backup_get_status", "bits_backup_get_status");
 add_action("wp_ajax_bits_backup_get_backup", "bits_backup_get_backup");
 add_action("wp_ajax_bits_backup_update_backup", "bits_backup_update_backup");
@@ -61,34 +60,65 @@ function bits_anybackup_deactivation() {
 }
 
 function bits_init() {
-  wp_register_script('anybackup-angular',
-    plugins_url( '/plugin-assets/anybackup-angular-1.2.20.min.js', __FILE__ ));
-  wp_register_script('anybackup-angular-ui',
-    plugins_url( '/plugin-assets/anybackup-angular-ui-bootstrap-0.12.0.min.js', __FILE__ ));
-  wp_register_script('anybackup-wordpress',
-    plugins_url( '/plugin-assets/anybackup-wordpress-1.0.js', __FILE__ ));
-  wp_register_script('anybackup-moment',
-    plugins_url( '/plugin-assets/moment-2.8.2.min.js', __FILE__ ));
-  wp_register_style('anybackup-bootstrap',
-    plugins_url( '/plugin-assets/anybackup-bootstrap-namespaced-3.2.0.css', __FILE__ ));
-  wp_register_style('anybackup-wordpress',
-    plugins_url( '/plugin-assets/anybackup-wordpress-1.0.css', __FILE__ ));
-  wp_register_style('anybackup-font-awesome',
-    plugins_url( '/plugin-assets/font-awesome-4.3.0/css/font-awesome.min.css', __FILE__ ));
+  //vendor
+  wp_register_script('anybackup-angular', plugins_url( '/plugin-assets/anybackup-angular-1.2.20.min.js', __FILE__ ));
+  wp_register_script('anybackup-moment', plugins_url( '/plugin-assets/moment-2.8.2.min.js', __FILE__ ));
+  wp_register_script('anybackup-angular-ui', plugins_url( '/plugin-assets/anybackup-angular-ui-bootstrap-0.12.0.min.js', __FILE__ ));
+
+  //custom
+  wp_register_script('anybackup-base', plugins_url( '/plugin-assets/custom/base.js', __FILE__ ));
+  wp_register_script('anybackup-factories', plugins_url( '/plugin-assets/custom/factories.js', __FILE__ ));
+
+  wp_register_script('anybackup-backup', plugins_url( '/plugin-assets/custom/backup.js', __FILE__ ));
+  wp_register_script('anybackup-pricing', plugins_url( '/plugin-assets/custom/pricing.js', __FILE__ ));
+  wp_register_script('anybackup-settings', plugins_url( '/plugin-assets/custom/settings.js', __FILE__ ));
+  wp_register_script('anybackup-restore', plugins_url( '/plugin-assets/custom/restore.js', __FILE__ ));
+  wp_register_script('anybackup-migrate', plugins_url( '/plugin-assets/custom/migrate.js', __FILE__ ));
+
+  //vendor
+  wp_register_style('anybackup-bootstrap', plugins_url( '/plugin-assets/anybackup-bootstrap-namespaced-3.2.0.css', __FILE__ ));
+  wp_register_style('anybackup-font-awesome', plugins_url( '/plugin-assets/font-awesome-4.3.0/css/font-awesome.min.css', __FILE__ ));
+
+  //custom
+  wp_register_style('anybackup-base', plugins_url( '/plugin-assets/custom/base.css', __FILE__ ));
 }
 function bits_load_scripts() {
+  //vendor
   wp_enqueue_script('anybackup-angular');
   wp_enqueue_script('anybackup-angular-ui');
   wp_enqueue_script('anybackup-moment');
-  wp_enqueue_script('anybackup-wordpress');
+
+  //custom
+  wp_enqueue_script('anybackup-base');
+  wp_enqueue_script('anybackup-factories');
+
+  wp_enqueue_script('anybackup-backup');
+  wp_enqueue_script('anybackup-pricing');
+  wp_enqueue_script('anybackup-settings');
+  wp_enqueue_script('anybackup-restore');
+  wp_enqueue_script('anybackup-migrate');
+
+  //vendor
   wp_enqueue_style('anybackup-bootstrap');
-  wp_enqueue_style('anybackup-wordpress');
   wp_enqueue_style('anybackup-font-awesome');
+
+  //custom
+  wp_enqueue_style('anybackup-base');
 }
 
 function bits_anybackup_menu() {
   $icon = plugins_url("anybackup/plugin-assets/logo-20x20.png");
-  add_menu_page(__('AnyBackup'), __('AnyBackup'), 'manage_options', 'backup_bits_anybackup', 'bits_anybackup_menu_render', $icon); 
+  add_menu_page("AnyBackup", "AnyBackup", 'manage_options', 'backup_bits_anybackup', 'anybackup_render_backup', $icon); 
+  add_submenu_page('backup_bits_anybackup', __('Restore'), __('Restore'), 'manage_options', 'anybackup_render_restore', 'anybackup_render_restore'); 
+  add_submenu_page('backup_bits_anybackup', __('Migrate'), __('Migrate'), 'manage_options', 'anybackup_render_migrate', 'anybackup_render_migrate'); 
+  //add_submenu_page('backup_bits_anybackup', __('Changelog'), __('Changelog'), 'manage_options', 'anybackup_render_changelog', 'anybackup_render_changelog'); 
+  add_submenu_page('backup_bits_anybackup', __('Settings'), __('Settings'), 'manage_options', 'anybackup_render_settings', 'anybackup_render_settings'); 
+  add_submenu_page('backup_bits_anybackup', __('Plans & Pricing'), "<span style='color:#f18500'>".__('Plans & Pricing')."</span>", 'manage_options', 'anybackup_render_pricing', 'anybackup_render_pricing'); 
+  global $submenu;
+  if( isset( $submenu['backup_bits_anybackup'] ) ) {
+    $submenu['backup_bits_anybackup'][0][0] = __("Backup");
+  }
+
 }
 
 function bits_get_api() {
@@ -110,13 +140,17 @@ function bits_get_new_api() {
   return $api;
 }
 
+function anybackup_render($page) {
+  require "includes/admin-menu-common.php";
+  require "includes/$page";
+}
 
-function bits_anybackup_menu_render() {
+function anybackup_render_backup() {
   if(isset($_GET['runSpecs'])) {
-    require 'spec/bits-backup-spec.php';
+    anybackup_render('bits-backup-spec.php');
   } elseif(isset($_POST['upgradeAccountToPaid'])) {
     bits_debug_upgrade_account();
-    require 'includes/admin-menu.php';
+    anybackup_render('admin-menu-backup.php');
   } elseif(isset($_POST['createNewApiKey'])) {
     $api_key = bits_get_api()->create_api_key();
     update_option("bits_api_key", $api_key);
@@ -125,16 +159,35 @@ function bits_anybackup_menu_render() {
     if($timestamp !== false) {
       wp_unschedule_event($timestamp, 'bits_iterate_backup');
     }
-    require 'includes/admin-menu.php';
+    anybackup_render('admin-menu-backup.php');
   } elseif(isset($_POST['debugBackupNow'])) {
     bits_debug_backup();
   } elseif(isset($_POST['forceCancel'])) {
     bits_force_cancel();
   } else {
-    require 'includes/admin-menu.php';
+    anybackup_render('admin-menu-backup.php');
   }
 }
 
+function anybackup_render_restore() {
+  anybackup_render("admin-menu-restore.php");
+}
+function anybackup_render_migrate() {
+  anybackup_render('admin-menu-migrate.php');
+}
+function anybackup_render_changelog() {
+  anybackup_render('admin-menu-changelog.php');
+}
+function anybackup_render_settings() {
+  if($_POST) {
+    $api = bits_get_api();
+    $result = $api->update_site(array("backup_frequency_in_hours" => intval($_POST["backup_frequency_in_hours"])));
+  }
+  anybackup_render('admin-menu-settings.php');
+}
+function anybackup_render_pricing() {
+  anybackup_render('admin-menu-pricing.php');
+}
 add_filter('cron_schedules', 'add_scheduled_interval');
  
 // add once 30 minute interval to wp schedules
@@ -198,10 +251,10 @@ function bits_debug_backup(){
   BitsUtil::reset_nice();
 }
 
-function bits_backup_for_date() {
+function bits_backup_list() {
   $GLOBALS["BITS_DEBUG"]=false;
   $api = bits_get_api();
-  die($api->json($api->get_backups()));
+  die($api->json($api->get_backups($_REQUEST['site_id'])));
 }
 
 function bits_register_account() {
@@ -216,13 +269,7 @@ function bits_login_account() {
   die($api->json($response));
 }
 
-function bits_backup_force_backup_now() {
-  $api = bits_get_api();
-  $api->create_backup(array("user-initiated" => true));
-  wp_schedule_single_event(time(), 'bits_user_initiated_backup');
-  die('ok');
-}
-function bits_backup_start_job() {
+function bits_backup_backup_now() {
   $api = bits_get_api();
   $api->create_backup(array("user-initiated" => true));
   bits_start_backup_wp_cron();
