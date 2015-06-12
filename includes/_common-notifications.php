@@ -47,3 +47,9 @@
    Restore cancelled.
  </p>
 </div>
+<div ng-if='loading'>
+  <div class="logo-section">
+    <h1><i class='fa fa-spinner fa-pulse'></i></h1>
+  </div>
+</div>
+

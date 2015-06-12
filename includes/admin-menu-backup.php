@@ -27,12 +27,7 @@
       Your first backup can take a while.  Feel free to leave this page and check in later.
     </p>
   </div>
-  <div ng-if='loading'>
-    <div class="logo-section">
-      <h1><i class='fa fa-spinner fa-pulse'></i></h1>
-    </div>
-  </div>
- 
+
   <div id='dashboard' ng-hide='loading'>
     <div ng-if="!status.backup_running">
       <div ng-if='status.backup_allowed'>

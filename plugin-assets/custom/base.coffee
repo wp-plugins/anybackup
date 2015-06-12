@@ -70,7 +70,6 @@ app.controller "RegistrationModalController", ($scope, $modalInstance, $http, $r
 
 app.controller "BaseController", ($scope, $http, $location, backupFactory, accountFactory) ->
   $scope.backups = []
-  $scope.loading = true
 
   $scope.selectedBackupId = $location.search().backup_id
 

@@ -91,7 +91,6 @@
 
   app.controller("BaseController", function($scope, $http, $location, backupFactory, accountFactory) {
     $scope.backups = [];
-    $scope.loading = true;
     $scope.selectedBackupId = $location.search().backup_id;
     $scope.list = function(siteId) {
       return backupFactory.list(siteId, function(data) {

@@ -1,36 +1,3 @@
-<script type="text/ng-template" id="supportModal">
-  <div class="bootstrap-styles">
-    <div class="modal-header">
-      <button type="button" class="close" ng-click="dismiss()" aria-hidden="true">×</button>
-      <h4 class="modal-title" id="myModalLabel">AnyBackup Support</h4>
-    </div>
-
-    <div class="modal-body">
-      <div class="error" ng-show="error">
-        {{error}}
-      </div>
-      <form role="form" name="supportForm">
-        <div class="form-group">
-          <label>Tell us whats on your mind</label>
-          <div class="input-group">
-            <textarea ng-model='content'></textarea>
-            <div class='checkbox'>
-              <div ng-html='paid'/>
-              <label><input type='checkbox' ng-model='urgent' ng-disabled="!paid"> This is urgent </input></label>
-              <div class='premium' ng-show='!paid' ng-click='upgradeToPaid()'>Upgrade to a paid plan in order to get urgent support</div>
-            </div>
-          </div>
-        </div>
-      </form>
-
-    </div>
-
-    <div class="modal-footer">
-      <input type='submit' ng-click="sendSupport()" class="form-control btn btn-primary" ng-disabled="!supportForm.$valid" value="Save"></input>
-    </div>
-  </div>
-</script>
-
 
       <div class="col-md-2 col-sm-12 right-align pull-right top-section" ng-show="email">
 

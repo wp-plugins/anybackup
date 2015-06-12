@@ -4,6 +4,7 @@
     $controller("BaseController", {
       $scope: $scope
     });
+    $scope.loading = true;
     $scope.list = function() {
       return backupFactory.list(null, function(data) {
         $scope.backups = data.backups;
