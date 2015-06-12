@@ -3,13 +3,13 @@
  * Plugin Name: AnyBackup
  * Plugin URI: http://www.anybackup.io
  * Description: Automatic backups for your wordpress sites.
- * Version: 1.3.2
+ * Version: 1.3.3
  * Author: 255 BITS LLC
  * Author URI: https://anybackup.io
  * License: MIT
  */
 
-$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.3.2";
+$GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.3.3";
 
 if (is_multisite()) {
   exit("AnyBackup does not support multisite wordpress configurations.  Contact us at support@255bits.com to get access to our multisite beta.");
@@ -35,7 +35,6 @@ add_action("wp_ajax_bits_backup_get_backup", "bits_backup_get_backup");
 add_action("wp_ajax_bits_backup_update_backup", "bits_backup_update_backup");
 add_action("wp_ajax_bits_backup_get_sites", "bits_backup_get_sites");
 add_action("wp_ajax_bits_backup_get_plans", "bits_backup_get_plans");
-add_action("wp_ajax_bits_backup_send_support", "bits_backup_send_support");
 add_action("wp_ajax_bits_backup_update_account", "bits_backup_update_account");
 
 add_action("wp_ajax_bits_register_account", "bits_register_account");
@@ -113,6 +112,7 @@ function bits_anybackup_menu() {
   add_submenu_page('backup_bits_anybackup', __('Migrate'), __('Migrate'), 'manage_options', 'anybackup_render_migrate', 'anybackup_render_migrate'); 
   //add_submenu_page('backup_bits_anybackup', __('Changelog'), __('Changelog'), 'manage_options', 'anybackup_render_changelog', 'anybackup_render_changelog'); 
   add_submenu_page('backup_bits_anybackup', __('Settings'), __('Settings'), 'manage_options', 'anybackup_render_settings', 'anybackup_render_settings'); 
+  add_submenu_page('backup_bits_anybackup', __('Support'), __('Support'), 'manage_options', 'anybackup_render_support', 'anybackup_render_support'); 
   add_submenu_page('backup_bits_anybackup', __('Plans & Pricing'), "<span style='color:#f18500'>".__('Plans & Pricing')."</span>", 'manage_options', 'anybackup_render_pricing', 'anybackup_render_pricing'); 
   global $submenu;
   if( isset( $submenu['backup_bits_anybackup'] ) ) {
@@ -153,6 +153,7 @@ function anybackup_render_backup() {
     anybackup_render('admin-menu-backup.php');
   } elseif(isset($_POST['createNewApiKey'])) {
     $api_key = bits_get_api()->create_api_key();
+    update_option("bits_anybackup_dismiss_initial_notice", false);
     update_option("bits_api_key", $api_key);
     // This removes any stale cron jobs from previous docker runs
     $timestamp = wp_next_scheduled( 'bits_iterate_backup' );
@@ -184,6 +185,15 @@ function anybackup_render_settings() {
     $result = $api->update_site(array("backup_frequency_in_hours" => intval($_POST["backup_frequency_in_hours"])));
   }
   anybackup_render('admin-menu-settings.php');
+}
+
+function anybackup_render_support() {
+  if($_POST){
+    $api = bits_get_api();
+    $api->create_support_ticket($_REQUEST["urgent"], $_REQUEST["content"]);
+  }
+
+  anybackup_render('admin-menu-support.php');
 }
 function anybackup_render_pricing() {
   anybackup_render('admin-menu-pricing.php');
@@ -362,11 +372,6 @@ function bits_restore_from_backup() {
   die("OK");
 }
 
-function bits_backup_send_support() {
-  $api = bits_get_api();
-  die($api->json($api->create_support_ticket($_REQUEST["urgent"], $_REQUEST["content"])));
-}
-
 function bits_backup_update_account() {
   $api = bits_get_api();
   $update = $api->update_account($_REQUEST["plan_id"], $_REQUEST["token"]);
@@ -379,14 +384,14 @@ function bits_anybackup_admin_notice(){
     $current_page = $_GET['page'];
   }
   if(isset($_GET) && isset($_GET['bits_anybackup_dismiss'])) {
-    add_option("bits_anybackup_dismiss_initial_notice", true);
+    update_option("bits_anybackup_dismiss_initial_notice", true);
   }
   if(get_option("bits_anybackup_dismiss_initial_notice") == true) {
     return;
   }
   if($current_page != 'backup_bits_anybackup') {
 ?>
-   <div class="update-nag">
+   <div class="updated">
      <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>
         <h3> 
           <img src="<?php echo plugins_url("anybackup/plugin-assets/logo-512x512.png"); ?>" style='width:24px;height:24px;float:left;margin-right:6px;'/>
@@ -394,13 +399,12 @@ function bits_anybackup_admin_notice(){
         </h3>
       </a> 
       <p>
-        AnyBackup is carefully preparing your first backup. 
-        <br>
-        <br>
-        This may take a while, your site performance will not be impacted.  
+        Congratulations!  You're now setup for daily backups.  Register to access your backups anywhere.
       </p>
       <p>
-      <a href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>Preferences</a>
+      <a target="_self" href='<?php echo admin_url('admin.php?page=backup_bits_anybackup');?>'>Backups</a>
+      | 
+      <a target="_self" href='<?php echo admin_url('admin.php?page=anybackup_render_settings');?>'>Settings</a>
       | 
       <a href='<?php echo add_query_arg(array('bits_anybackup_dismiss' => true),  $_SERVER["REQUEST_URI"] ); ?>'> Dismiss </a>
       </p>

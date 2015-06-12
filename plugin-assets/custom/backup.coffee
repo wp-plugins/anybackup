@@ -1,5 +1,6 @@
 app.controller "BackupController", ($scope, $http, $controller, backupFactory, accountFactory) ->
   $controller("BaseController", {$scope:$scope}) #subclass
+  $scope.loading = true
   $scope.list =  ->
     backupFactory.list null, (data) ->
       $scope.backups = data.backups
