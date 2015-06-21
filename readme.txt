@@ -4,7 +4,7 @@ Tags: backup, migration, migrate, disaster recovery, restore, back up, archive, 
 Requires at least: 3.5.2
 Tested up to: 4.2.2
 License: MIT
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License URI: http://opensource.org/licenses/MIT
 Donate Link: https://anybackup.io
 
@@ -90,6 +90,10 @@ AnyBackup for Wordpress uses:
 
 
 == Changelog ==
+
+=1.3.4=
+
+* Fixed a migration bug with very large sites
 
 =1.3.3=
 
