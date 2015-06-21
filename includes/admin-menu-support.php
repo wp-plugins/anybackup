@@ -1,3 +1,8 @@
+<?php
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+?>
 <div class='wrap' ng-app="BitsAnyBackup">
   <form method='POST' action="?page=anybackup_render_support">
     <h2>AnyBackup Support</h2>

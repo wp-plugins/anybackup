@@ -1,6 +1,10 @@
 <?php
 
-  class BitsBackupWorker {
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+
+ class BitsBackupWorker {
     private $api;
     const ROWS_PER_GROUP=1000;
     const FILES_PER_CHUNK=600;

@@ -1,5 +1,9 @@
 <?php
 
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+
   class BitsRestoreWorker {
     const DOWNLOAD_FILES_PER_CHUNK=1000;
     private $api;

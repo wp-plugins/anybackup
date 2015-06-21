@@ -1,3 +1,8 @@
+<?php
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+?>
 <?php $api = bits_get_api(); ?>
 <div class='wrap'>
   <div ng-controller='RestoreController' ng-app="BitsAnyBackup">

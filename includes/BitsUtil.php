@@ -1,4 +1,9 @@
 <?php
+
+if (! defined( 'ABSPATH' )) {
+  exit; // Exit if accessed directly
+}
+
 class BitsUtil {
     /** Returns a list of all files in $path, recursively */
     static function glob_r($path) {

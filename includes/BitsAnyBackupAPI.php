@@ -1,5 +1,9 @@
 <?php
 
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+
   require(dirname(__FILE__).'/JSON.php');
 
   // Calls the 255 BITS time machine API
@@ -293,7 +297,7 @@
       $row_group_fingerprint_map = $this->map_row_group_fingerprint($row_group);
       $row_group_fingerprint = $row_group_fingerprint_map["fingerprint"];
       // add row group
-      $add_row_group_args = array("row_groups" =>[$row_group_fingerprint]);
+      $add_row_group_args = array("row_groups" =>array($row_group_fingerprint));
       $result = $this->call_api("POST", "backups/$id/add", $add_row_group_args);
       if(is_wp_error($result)) {
         return $result;

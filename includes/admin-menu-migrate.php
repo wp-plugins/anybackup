@@ -1,3 +1,8 @@
+<?php
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+?>
 <div class="wrap" ng-controller='MigrateController' ng-app="BitsAnyBackup" >
 <h2> Migrate </h2>
 <?php require("_common-notifications.php"); ?>

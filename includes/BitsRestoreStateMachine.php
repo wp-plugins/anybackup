@@ -1,5 +1,9 @@
 <?php
 
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+
   // Restores a backup
   // Note:  To restore a backup, you must call restore_from_backup_id($backup_id) .
   class BitsRestoreStateMachine {

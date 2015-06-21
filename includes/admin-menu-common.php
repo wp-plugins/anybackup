@@ -1,3 +1,9 @@
+<?php
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+?>
+
 <script type="text/ng-template" id="loginModal">
   <div class="bootstrap-styles">
     <div class="modal-header">
