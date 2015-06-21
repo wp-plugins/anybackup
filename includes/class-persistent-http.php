@@ -1,5 +1,9 @@
 <?php
 
+if (! defined( 'ABSPATH' )) {
+  exit; // Exit if accessed directly
+}
+
 function bits_microtime_float() {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);

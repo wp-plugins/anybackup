@@ -1,3 +1,8 @@
+<?php
+if (! defined( 'ABSPATH' )) {
+  exit; // Exit if accessed directly
+}
+?>
 <div class="updated settings-error" ng-if="status.most_recent_backup && status.most_recent_backup.committed_seconds_ago != null && status.most_recent_backup.committed_seconds_ago < 60"> 
   <p>
     Finished '<a target="_self" href="?page=backup_bits_anybackup&backup_id={{status.most_recent_backup.id}}">{{status.most_recent_backup.name}}</a>'

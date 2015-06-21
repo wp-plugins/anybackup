@@ -1,4 +1,9 @@
 <?php
+
+if (! defined( 'ABSPATH' )) {
+  exit; // Exit if accessed directly
+}
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**

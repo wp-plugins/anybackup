@@ -1,7 +1,12 @@
 <?php
-$api = bits_get_api();
-$site = $api->get_site();
-$backup_frequency_in_hours = $site["backup_frequency_in_hours"];
+  if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+?>
+<?php
+  $api = bits_get_api();
+  $site = $api->get_site();
+  $backup_frequency_in_hours = $site["backup_frequency_in_hours"];
 ?>
 <div class='wrap' ng-controller="SettingsController" ng-app="BitsAnyBackup">
   <?php if($_POST) { ?>

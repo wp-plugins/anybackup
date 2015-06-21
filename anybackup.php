@@ -8,6 +8,9 @@
  * Author URI: https://anybackup.io
  * License: MIT
  */
+if (! defined( 'ABSPATH' )) {
+  exit; // Exit if accessed directly
+}
 
 $GLOBALS["BITS_ANYBACKUP_PLUGIN_VERSION"] = "1.3.3";
 
@@ -222,10 +225,11 @@ add_action( 'bits_iterate_backup', 'bits_create_backup' );
 function bits_create_backup(){
   BitsUtil::renice(20);
   $api = bits_get_api();
-  $api->create_backup(array());
-  $sm = new BitsBackupStateMachine($api);
-
-  $sm->run();
+  $backup = $api->create_backup(array());
+  if(isset($backup['id']) && $backup['id'] > 0) {
+    $sm = new BitsBackupStateMachine($api);
+    $sm->run();
+  }
   BitsUtil::reset_nice();
 }
 

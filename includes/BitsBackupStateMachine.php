@@ -1,6 +1,10 @@
 <?php
 
-  // Resumes an existing backup
+   if (! defined( 'ABSPATH' )) {
+    exit; // Exit if accessed directly
+  }
+
+ // Resumes an existing backup
   // + Saves the state of the current backup
   class BitsBackupStateMachine {
     private $api;
