@@ -23,7 +23,7 @@
   <div class="updated premium-nag settings-error" ng-if="!status.paid && status.email"> 
     <p>
       <span ng-if="thanks_for_registering">Thanks for registering. </span>
-      <a target="_self" href="?page=anybackup_render_pricing">Upgrade</a> to unlock unlimited previews, multiple sites, and urgent support.  
+      <a href="?page=anybackup_render_pricing">Upgrade</a> to unlock unlimited previews, multiple sites, and urgent support.  
     </p>
   </div>
 
@@ -94,7 +94,7 @@
             Live Preview
           </a>
           <span ng-if="!status.paid" class='premium'>*</span>
-          <a target="_self" href="?page=anybackup_render_restore&backup_id={{selectedBackup.id}}" class="button button-primary">Restore</a>
+          <a href="?page=anybackup_render_restore&backup_id={{selectedBackup.id}}" class="button button-primary">Restore</a>
         </div>
         <div class='backup-details' ng-if='!status.paid && status.email'>
           <div class='premium spacer'>

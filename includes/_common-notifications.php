@@ -5,13 +5,13 @@ if (! defined( 'ABSPATH' )) {
 ?>
 <div class="updated settings-error" ng-if="status.most_recent_backup && status.most_recent_backup.committed_seconds_ago != null && status.most_recent_backup.committed_seconds_ago < 60"> 
   <p>
-    Finished '<a target="_self" href="?page=backup_bits_anybackup&backup_id={{status.most_recent_backup.id}}">{{status.most_recent_backup.name}}</a>'
+    Finished '<a href="?page=backup_bits_anybackup&backup_id={{status.most_recent_backup.id}}">{{status.most_recent_backup.name}}</a>'
   </p>
 </div>
 
 <div class="updated settings-error" ng-if="status.most_recent_restore && status.most_recent_restore.completed_seconds_ago != null && status.most_recent_restore.completed_seconds_ago < 60"> 
   <p>
-    Finished restore from '<a target="_self" href="?page=backup_bits_anybackup&backup_id={{status.most_recent_restore.backup_id}}">{{status.most_recent_restore.backup_name}}</a>'
+    Finished restore from '<a href="?page=backup_bits_anybackup&backup_id={{status.most_recent_restore.backup_id}}">{{status.most_recent_restore.backup_name}}</a>'
   </p>
 </div>
 

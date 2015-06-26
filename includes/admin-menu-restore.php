@@ -26,7 +26,7 @@
           <a href="#" ng-click="restoreFromBackup()" class="button button-primary">
             Restore from {{selectedBackup.name}}
           </a>
-          <a class="button" target="_self" href="?page=backup_bits_anybackup&backup_id={{selectedBackup.id}}">View Details</a>
+          <a class="button" href="?page=backup_bits_anybackup&backup_id={{selectedBackup.id}}">View Details</a>
         </div>
       </div>
 
@@ -34,6 +34,6 @@
   </div>
   <div class='backup-list' ng-show="backups.length == 0 && !loading">
     <h3> No Backups Found </h3>
-    <p><a target="_self" href="?page=backup_bits_anybackup">Create a backup</a></p>
+    <p><a href="?page=backup_bits_anybackup">Create a backup</a></p>
   </div>
 </div>

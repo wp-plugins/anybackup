@@ -10,7 +10,7 @@
     <input type='submit' value='New Server'/>
   </form>
 
-  <a target="_self" href="?page=backup_bits_anybackup&runSpecs=true"> Run Specs </a>
+  <a href="?page=backup_bits_anybackup&runSpecs=true"> Run Specs </a>
 
 
 </div>
