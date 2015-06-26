@@ -18,7 +18,7 @@
   <h2>AnyBackup Settings</h2>
   <?php require("_common-notifications.php"); ?>
 
-  <form method='POST'>
+  <form method='POST' action='<?php echo admin_url("admin.php?page=anybackup_render_settings");?>'>
     <table class="form-table">
       <tr class="form-field">
         <th><label>Automatic Backup Frequency</label></th>

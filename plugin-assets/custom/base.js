@@ -8,10 +8,6 @@
     };
   });
 
-  app.config(function($locationProvider) {
-    return $locationProvider.html5Mode(true);
-  });
-
   app.controller("LoginModalController", function($scope, $http, $modalInstance, $rootScope) {
     $scope.backups = [];
     $scope.dismiss = function() {
@@ -89,9 +85,29 @@
     };
   });
 
-  app.controller("BaseController", function($scope, $http, $location, backupFactory, accountFactory) {
+  app.controller("BaseController", function($scope, $http, backupFactory, accountFactory) {
     $scope.backups = [];
-    $scope.selectedBackupId = $location.search().backup_id;
+    $scope.parseUrl = function(url) {
+      var params, part, parts;
+      if (url == null) {
+        url = location.href;
+      }
+      params = {};
+      return ((function() {
+        var _i, _len, _ref, _results;
+        if (url.indexOf("?") !== -1) {
+          _ref = (url.split("?")).pop().split("&");
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            part = _ref[_i];
+            _results.push((parts = part.split("=")) && (params[parts[0]] = parts[1]));
+          }
+          return _results;
+        }
+      })()) && params || {};
+    };
+    $scope.urlParams = $scope.parseUrl();
+    $scope.selectedBackupId = $scope.urlParams.backup_id;
     $scope.list = function(siteId) {
       return backupFactory.list(siteId, function(data) {
         $scope.backups = data.backups;

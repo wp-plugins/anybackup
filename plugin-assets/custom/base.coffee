@@ -4,8 +4,6 @@ app.filter 'html', ($sce) ->
   (input) ->
     $sce.trustAsHtml(input)
 
-app.config ($locationProvider) ->
-  $locationProvider.html5Mode(true)
 
 app.controller "LoginModalController", ($scope, $http, $modalInstance, $rootScope) ->
   $scope.backups = []
@@ -68,10 +66,16 @@ app.controller "RegistrationModalController", ($scope, $modalInstance, $http, $r
       $scope.error = "Error communicating with server"
 
 
-app.controller "BaseController", ($scope, $http, $location, backupFactory, accountFactory) ->
+app.controller "BaseController", ($scope, $http, backupFactory, accountFactory) ->
   $scope.backups = []
 
-  $scope.selectedBackupId = $location.search().backup_id
+  $scope.parseUrl = ( url = location.href ) ->
+    params = {}
+    ( ( parts = part.split( "=" ) ) && params[ parts[0] ] = parts[1] for part in ( url.split "?" ).pop().split "&" if url.indexOf( "?" ) != -1 ) && params || {}
+ 
+  $scope.urlParams = $scope.parseUrl()
+
+  $scope.selectedBackupId = $scope.urlParams.backup_id
 
   $scope.list = (siteId) ->
     backupFactory.list siteId, (data) ->

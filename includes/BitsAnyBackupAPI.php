@@ -320,7 +320,7 @@
           }
         }
         //   create row_group
-        $new_row_groups = $this->create_row_groups([$row_group]);
+        $new_row_groups = $this->create_row_groups(array($row_group));
         if(is_wp_error($new_row_groups)) {
           return $new_row_groups;
         }
