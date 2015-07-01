@@ -4,8 +4,6 @@
     exit; // Exit if accessed directly
   }
 
-  require(dirname(__FILE__).'/JSON.php');
-
   // Calls the 255 BITS time machine API
   class BitsAnyBackupAPI {
     const API_VERSION = 1;
@@ -557,24 +555,42 @@
       return sha1($this->json($row));
     }
 
+    function is_utf8($str) {
+      return (bool) preg_match('//u', $str);
+    }
+    function force_utf_8($obj) {
+      if(is_string($obj)) {
+        if($this->is_utf8($obj)) {
+          return $obj;
+        }
+        return "base64:".base64_encode($obj);
+      }
+      if(is_array($obj)) {
+        foreach($obj as $key => $value) { 
+          $obj[$key]=$this->force_utf_8($value);
+        }
+      }
+      return $obj;
+    }
     function json($obj) { 
       if($obj == null) {
         return "{}";
       }
+      $force_utf8_obj = $this->force_utf_8($obj);
       if(function_exists("json_encode")) {
-        return json_encode($obj);
+        return json_encode($force_utf8_obj);
+      } else {
+        return new WP_Error("json-encode-missing", "json_encode is missing on this version of PHP.  Please use PHP 5+");
       }
-      $json = new Services_JSON();
-      $data = $json->encode($obj);
-      return $data;
+
     }
 
     function json_decode($response) {
       if(function_exists("json_decode")) {
         return json_decode($response);
+      } else {
+        return new WP_Error("json-decode-missing", "json_decode is missing on this version of PHP.  Please use PHP 5+");
       }
-      $json = new Services_JSON();
-      return $json->decode($response);
     }
 
     /**
@@ -621,7 +637,9 @@
         if(is_wp_error($upload_path)) {
           return $upload_path;
         }
-        $result[$file] = $upload_path;
+        if($upload_path != null) {
+          $result[$file] = $upload_path;
+        }
       }
       return $result;
     }
@@ -641,13 +659,18 @@
       if(!is_readable($file)) {
         return new WP_Error("cannot-read-file", "file $file is not readable.  Cannot backup");
       }
+      $filesize = filesize($file);
 
-      if(filesize($file) <= 1024*1024) {
+      if($filesize <= 1024*1024) {
         $uploaded = $this->upload_small_file($file, $blob);
       } else {
-        $initialize = $this->multipart_upload_initialize($blob);
+        $initialize = $this->multipart_upload_initialize($blob, $filesize);
         if(is_wp_error($initialize)) {
           return $initialize;
+        }
+        if($initialize['file-size-too-large']) {
+          $this->log("warning", "$file cannot be backed up.  It is too large.  Please upgrade for unlimited storage.");
+          return null;
         }
         $parts = $this->multipart_upload_parts($file, $blob);
         if(is_wp_error($parts)) {
@@ -680,11 +703,11 @@
       return $result;
     }
 
-    function multipart_upload_initialize($blob) {
+    function multipart_upload_initialize($blob, $filesize) {
       $fingerprint = $blob["fingerprint"];
       echo "==Initializing multipart upload for:\n";
       var_dump($blob);
-      return $this->call_api("POST", "blobs/".$fingerprint."/start");
+      return $this->call_api("POST", "blobs/".$fingerprint."/start", array("filesize" => $filesize));
     }
 
     function multipart_upload_parts($file, $blob) {
@@ -1036,7 +1059,6 @@
         $headers['Authorization']="Token ".$this->api_key;
       }
       $url = $this->get_server()."/v".self::API_VERSION."/".$path;
-      $json = new Services_JSON();
       $headers["PROCESS_ID"] = getmypid();
 
       $response = $this->raw_call_http_retry(3, $method, $url, $data, $headers);

@@ -56,7 +56,7 @@
       $count = $result[0][0];
       return intval($count);
     }
-    private function rows_for_table($table, $offset, $limit) {
+    function rows_for_table($table, $offset, $limit) {
       $sql = "select * from `$table` limit $limit offset $offset";
       $results = $this->query($sql, ARRAY_A);
       return $results;

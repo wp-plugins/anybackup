@@ -13,7 +13,7 @@
       <h3>Backup to restore from:</h3>
       <select ng-model="selectedBackupId" ng-change="selectBackup()">
         <option value="">Select a Backup</option>
-        <option ng-repeat="backup in backups" ng-value="backup.id" ng-selected="backup.id == selectedBackupId">{{backup.name}} created {{readableDate(backup) | lowercase}}</option>
+        <option ng-repeat="backup in backups | filter:{state:'COMMITTED'}" ng-value="backup.id" ng-selected="backup.id == selectedBackupId">{{backup.name}} created {{readableDate(backup) | lowercase}}</option>
       </select>
       <div class='detail' ng-if="!selectedBackup && selectedBackupId">
         Loading...

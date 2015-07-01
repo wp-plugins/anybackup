@@ -32,6 +32,7 @@ app.controller "BackupController", ($scope, $http, $controller, backupFactory, a
     $scope.status.backup_running = true
     $scope.backup_cancelled = false
     $scope.backup_loading = true
+    $scope.status.step_description = "Starting your backup"
     data = {
         action: "bits_backup_backup_now"
       }
@@ -44,12 +45,29 @@ app.controller "BackupController", ($scope, $http, $controller, backupFactory, a
       $scope.updateStatus (data) ->
         $scope.backup_loading = false
       $scope.state = "enabled"
-    $scope.step_description = "Starting your backup"
 
   $scope.supportMessageSent = ->
     $scope.showSupportMessage = true
 
-  $scope.updateStatus() 
+  $scope.renderBackupOption = (backup) ->
+    switch backup.state
+      when 'COMMITTED' then (backup.name+' created '+$scope.readableDate(backup))
+      when 'CANCELLED' then ('Cancelled: '+backup.name+' created '+$scope.readableDate(backup))
+      when 'ERROR' then ('Failed: '+backup.name+' created '+$scope.readableDate(backup))
+      else "Invalid backup: "+backup.name
+
+
+  $scope.showLogs = () ->
+    $scope.selectedBackup.showLogs = true
+
+  $scope.hideLogs = () ->
+    $scope.selectedBackup.showLogs = false
+    
+  $scope.updateStatus()
+  $scope.statusUpdated = ->
+    if($scope.status.most_recent_backup && $scope.status.most_recent_backup.committed_seconds_ago != null && $scope.status.most_recent_backup.committed_seconds_ago < 60)
+      # Backup completed.  Refresh list
+      $scope.list()
 
   $scope.status = "Loading"
   $scope.step_number = -1

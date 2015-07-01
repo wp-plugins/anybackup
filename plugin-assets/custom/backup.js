@@ -43,6 +43,7 @@
       $scope.status.backup_running = true;
       $scope.backup_cancelled = false;
       $scope.backup_loading = true;
+      $scope.status.step_description = "Starting your backup";
       data = {
         action: "bits_backup_backup_now"
       };
@@ -51,18 +52,40 @@
         method: "POST",
         params: data
       });
-      request.success(function() {
+      return request.success(function() {
         $scope.updateStatus(function(data) {
           return $scope.backup_loading = false;
         });
         return $scope.state = "enabled";
       });
-      return $scope.step_description = "Starting your backup";
     };
     $scope.supportMessageSent = function() {
       return $scope.showSupportMessage = true;
     };
+    $scope.renderBackupOption = function(backup) {
+      switch (backup.state) {
+        case 'COMMITTED':
+          return backup.name + ' created ' + $scope.readableDate(backup);
+        case 'CANCELLED':
+          return 'Cancelled: ' + backup.name + ' created ' + $scope.readableDate(backup);
+        case 'ERROR':
+          return 'Failed: ' + backup.name + ' created ' + $scope.readableDate(backup);
+        default:
+          return "Invalid backup: " + backup.name;
+      }
+    };
+    $scope.showLogs = function() {
+      return $scope.selectedBackup.showLogs = true;
+    };
+    $scope.hideLogs = function() {
+      return $scope.selectedBackup.showLogs = false;
+    };
     $scope.updateStatus();
+    $scope.statusUpdated = function() {
+      if ($scope.status.most_recent_backup && $scope.status.most_recent_backup.committed_seconds_ago !== null && $scope.status.most_recent_backup.committed_seconds_ago < 60) {
+        return $scope.list();
+      }
+    };
     $scope.status = "Loading";
     $scope.step_number = -1;
     $scope.list();

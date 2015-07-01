@@ -105,9 +105,11 @@ app.controller "BaseController", ($scope, $http, backupFactory, accountFactory) 
     accountFactory.registerModal()
 
   $scope.readableDate = (backup) ->
+    localTimeZone = new Date().getTimezoneOffset()
     if(backup && backup.committed_at)
-      localTimeZone = new Date().getTimezoneOffset()
-      moment.parseZone(backup.committed_at).zone(localTimeZone/60).calendar()
+      moment.parseZone(backup.committed_at).zone(localTimeZone/60).calendar().toLowerCase()
+    else if(backup && backup.created_at)
+      moment.parseZone(backup.created_at).zone(localTimeZone/60).calendar().toLowerCase()
     else
       ""
 
@@ -120,6 +122,7 @@ app.controller "BaseController", ($scope, $http, backupFactory, accountFactory) 
     request.finally ->
       clearTimeout($scope.updateStatusTimeout) if $scope.updateStatusTimeout
       $scope.updateStatusTimeout = setTimeout($scope.updateStatus, 7000)
+      $scope.statusUpdated() if $scope.statusUpdated
 
 
   $scope.cancel = () ->

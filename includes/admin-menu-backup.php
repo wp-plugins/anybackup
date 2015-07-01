@@ -9,13 +9,13 @@
   $backups = $api->get_backups();
 ?>
 
-<div class='wrap' ng-app="BitsAnyBackup" ng-controller="BackupController">
+<div class='wrap' ng-app="BitsAnyBackup" ng-controller="BackupController" ng-hide='loading'>
   <?php require 'admin-menu-debug-bar.php';?>
     <h2>
       Backup
     </h2>
 
-  <div class="updated settings-error" ng-if="!status.email && !loading"> 
+  <div class="updated settings-error" ng-if="!status.email"> 
     <p>
       <a ng-click='openLogin()'>Login</a> or <a href='#' ng-click='openRegister()'>register</a> to access your backups in an emergency.
     </p>
@@ -27,6 +27,12 @@
     </p>
   </div>
 
+  <div class="error" ng-if="!status.backup_allowed"> 
+    <p>
+      Uh oh, backups are not running! You are over your site limit. <a href="?page=anybackup_render_pricing">Upgrade</a> to re-enable backups on this site. You can still <a href="?page=anybackup_render_migrate">migrate</a> and <a href="?page=anybackup_render_restore">restore</a> your data.
+    </p>
+  </div>
+
   <?php require("_common-notifications.php"); ?>
   <div class="updated settings-error" ng-if="backups.length == 0 && status.backup_running"> 
     <p>
@@ -34,7 +40,7 @@
     </p>
   </div>
 
-  <div id='dashboard' ng-hide='loading'>
+  <div id='dashboard'>
     <div ng-if="!status.backup_running">
       <div ng-if='status.backup_allowed'>
         <div class='backup-status'>
@@ -46,12 +52,13 @@
     </div>
 
     <div class='backup-list' ng-show="backups.length > 0">
-
       <h3>My backups</h3>
 
       <select ng-model="selectedBackupId" ng-change="selectBackup()">
         <option value="">Select a Backup</option>
-        <option ng-repeat="backup in backups" ng-value="backup.id" ng-selected="backup.id == selectedBackupId">{{backup.name}} created {{readableDate(backup) | lowercase}}</option>
+        <option ng-repeat="backup in backups" ng-value="backup.id" ng-selected="backup.id == selectedBackupId">
+          {{renderBackupOption(backup)}}
+        </option>
       </select>
     </div>
     <div class='detail' ng-if="!selectedBackup && selectedBackupId">
@@ -66,6 +73,9 @@
       </div>
       <div class="title" ng-hide='editingName'>{{selectedBackup.name}} <a ng-click="editName()"><i class="fa fa-pencil"></i></a> </div>
       <form method="POST">
+        <div class='backup-show-notice' ng-if="selectedBackup.errors">{{selectedBackup.errors.length}} errors encountered.  <a ng-click='showLogs()'>See details</a></div>
+        <div class='backup-show-notice' ng-if="selectedBackup.warnings">{{selectedBackup.warnings.length}} warnings encountered.  <a ng-click='showLogs()'>See details</a></div>
+        <div class='backup-show-notice' ng-if="selectedBackup.state == 'CANCELLED' && selectedBackup.errors.length == 0">This backup was manually cancelled.  <a ng-click='showLogs()'>See details</a></div>
         <div class='backup-details'>
           <span class="field-label"><label>Created</label></span>
           <span class='backup-content'>{{readableDate(selectedBackup)}}</span>
@@ -105,6 +115,20 @@
           <div class='premium spacer'>
             <i class='fa fa-asterisk'></i> Register to access your live preview.
           </div>
+        </div>
+
+        <a class='backup-view-logs' ng-show='selectedBackup.logs.length > 0 && !selectedBackup.showLogs' ng-click='showLogs()'>View logs <i class='fa fa-chevron-down'></i></a>
+        <a class='backup-view-logs' ng-show='selectedBackup.showLogs' ng-click='hideLogs()'>Hide logs <i class='fa fa-chevron-up'></i></a>
+        <div class='backup-logs' ng-show='selectedBackup.showLogs'>
+          <table>
+            <tr>
+              <th>Level</th>
+              <th>Message</th>
+            </tr>
+            <tr ng-repeat="log in selectedBackup.logs">
+              <td>{{log.log_level | lowercase}}</td>
+              <td>{{log.message}}</td>
+            </tr>
         </div>
         <input type='hidden' name='restoreFromBackup' value="true"/>
         <input type="hidden" name='backupId' value='{{selectedBackup.id}}'/>

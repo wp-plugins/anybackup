@@ -142,9 +142,11 @@
     };
     $scope.readableDate = function(backup) {
       var localTimeZone;
+      localTimeZone = new Date().getTimezoneOffset();
       if (backup && backup.committed_at) {
-        localTimeZone = new Date().getTimezoneOffset();
-        return moment.parseZone(backup.committed_at).zone(localTimeZone / 60).calendar();
+        return moment.parseZone(backup.committed_at).zone(localTimeZone / 60).calendar().toLowerCase();
+      } else if (backup && backup.created_at) {
+        return moment.parseZone(backup.created_at).zone(localTimeZone / 60).calendar().toLowerCase();
       } else {
         return "";
       }
@@ -161,7 +163,10 @@
         if ($scope.updateStatusTimeout) {
           clearTimeout($scope.updateStatusTimeout);
         }
-        return $scope.updateStatusTimeout = setTimeout($scope.updateStatus, 7000);
+        $scope.updateStatusTimeout = setTimeout($scope.updateStatus, 7000);
+        if ($scope.statusUpdated) {
+          return $scope.statusUpdated();
+        }
       });
     };
     $scope.cancel = function() {

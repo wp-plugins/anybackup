@@ -10,10 +10,6 @@
       var data, request;
       $scope.status.restore_running = true;
       $scope.status.step_description = "Preparing.";
-      if ($scope.updateStatusTimeout) {
-        clearTimeout($scope.updateStatusTimeout);
-      }
-      $scope.updateStatusTimeout = null;
       data = {
         action: "bits_restore_from_backup",
         id: $scope.selectedBackup.id

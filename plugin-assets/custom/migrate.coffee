@@ -6,9 +6,6 @@ app.controller "MigrateController", ($scope, $controller, $http) ->
   $scope.migrate = (backupId) ->
     $scope.status.restore_running = true
     $scope.status.step_description = "Setting up migration."
-    console.log("Selected backup id: ", backupId)
-    clearTimeout($scope.updateStatusTimeout) if $scope.updateStatusTimeout
-    $scope.updateStatusTimeout = null
     data = {
       action: "bits_restore_from_backup",
       id: backupId
