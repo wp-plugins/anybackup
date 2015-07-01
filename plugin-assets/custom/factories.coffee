@@ -59,15 +59,18 @@ app.factory 'accountFactory', ($http, $modal) ->
         if(data.next_scheduled_backup == false)
           result.step_description = ""
         else
-          readable_time = moment().add(data.next_scheduled_backup, "seconds").fromNow()
-          result.step_description = "Your next backup starts #{readable_time}.  "
+          if(data.next_scheduled_backup)
+            readable_time = moment().add(data.next_scheduled_backup, "seconds").fromNow()
+            result.step_description = "Your next backup starts #{readable_time}.  "
+          else
+            result.step_description = "Manual backups only."
+
       callback(result)
     return request
   return this
 
 app.factory 'backupFactory', ($http) ->
   this.list = (siteId, callback) ->
-    console.log("bf", siteId)
     request = $http {
       url: ajaxurl, 
       method: "GET",

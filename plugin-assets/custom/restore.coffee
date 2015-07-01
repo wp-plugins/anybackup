@@ -7,8 +7,6 @@ app.controller "RestoreController", ($scope, $controller, $http) ->
   $scope.restoreFromBackup = ->
     $scope.status.restore_running = true
     $scope.status.step_description = "Preparing."
-    clearTimeout($scope.updateStatusTimeout) if $scope.updateStatusTimeout
-    $scope.updateStatusTimeout = null
     data = {
       action: "bits_restore_from_backup",
       id: $scope.selectedBackup.id

@@ -17,10 +17,11 @@
     <?php require 'admin-menu-debug-bar.php';?>
     <div class="modal-header">
       <h2 class="modal-title" id="myModalLabel">AnyBackup Pricing</h2>
-      <p> Pays for itself in just one prevented disaster </p>
+      <p> Pays for itself in just one prevented disaster. </p>
     </div>
     <div class="modal-body">
       <div class="row">
+        <div ng-show="status.plan == 'free'">You are currently on the free plan.  You are limited to 1 site and 10mb maximum individual file size.</div>
         <div ng-repeat="p in plans" ng-class='{"current-plan": p.name == status.plan}'>
           <div class="col-xs-12 col-md-4" ng-show='p.price_in_cents > 0'>
             <div class="panel panel-primary panel-#{p.name}}">
@@ -35,6 +36,7 @@
                     ${{p.price_in_cents/100}}<span class="subscript">/mo</span>
                   </h1>
                 </div>
+
                 <table class="table">
                   <tr>
                     <td>
@@ -54,6 +56,11 @@
                   <tr>
                     <td>
                       Unlimited previews
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Unlimited file size
                     </td>
                   </tr>
                   <tr class="active">

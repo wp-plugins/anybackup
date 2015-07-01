@@ -10,11 +10,6 @@
       var data, request;
       $scope.status.restore_running = true;
       $scope.status.step_description = "Setting up migration.";
-      console.log("Selected backup id: ", backupId);
-      if ($scope.updateStatusTimeout) {
-        clearTimeout($scope.updateStatusTimeout);
-      }
-      $scope.updateStatusTimeout = null;
       data = {
         action: "bits_restore_from_backup",
         id: backupId

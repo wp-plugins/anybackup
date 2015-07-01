@@ -53,7 +53,7 @@ function fail($obj) {
     <td>
       <?php
           $result = create_backup($api, array( "test" => "true" ));
-          if($result["id"] > 0) { pass(); } else { fail($result); };
+          if(!is_wp_error($result) && $result["id"] > 0) { pass(); } else { fail($result); };
       ?>
     </td>
   </tr>
@@ -611,6 +611,59 @@ function fail($obj) {
     </td>
   </tr>
   <tr>
+    <td>API - Force UTF8</td>
+    <td>
+    <?php
+      $hex = hex2bin("AFAFAF");
+      $expected = array(
+        [null, null],
+        ["test", "test"],
+        [array("a" => "b"), array("a" => "b")],
+        [array(1,2,3), array(1,2,3)],
+        [1, 1],
+        [array(array("test" => $hex)), array(array("test" => "base64:".base64_encode($hex)))],
+        [$hex, "base64:".base64_encode($hex)]
+      );
+      foreach($expected as $test) {
+        $input = $test[0];
+        $output = $test[1];
+        $actual = $api->force_utf_8($input);
+        if($actual == $output) { pass(); } else { echo "<br/>INPUT is $input expected '$output' got '$actual'"; fail($output); };
+      }
+    ?>
+  </tr>
+  <tr>
+    <td>Backup Worker - base64 encodes blobs</td>
+    <td>
+    <?php
+      $worker = new BitsBackupWorker($api);
+      $drop_sql = "DROP TABLE IF EXISTS `bitstesttable`";
+      $create_sql = "
+        CREATE TABLE `bitstesttable` (
+          `filenameMD5` binary(16) NOT NULL,
+          PRIMARY KEY (`filenameMD5`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+      ";
+
+      $insert_sql = "INSERT INTO bitstesttable (filenameMD5) VALUES (UNHEX('0000000056F97205570A72A3B5807B3F'))";
+      $select_sql = "SELECT * FROM bitnami_wordpress.bitstesttable";
+
+      $drop = BitsUtil::query($drop_sql, ARRAY_N);
+      $create = BitsUtil::query($create_sql, ARRAY_N);
+      $insert = BitsUtil::query($insert_sql, ARRAY_N);
+      $select = BitsUtil::query($select_sql, ARRAY_A);
+      $base64 = bin2hex($select[0]['filenameMD5']);
+
+      $rows = $worker->rows_for_table("bitstesttable", 0, 1000);
+      $json = $api->json($rows);
+      $decoded_class = $api->json_decode($json);
+      $decoded = $api->recurse_translate_object_to_array($decoded_class);
+      if(
+        $decoded[0]["filenameMD5"] == "base64:AAAAAFb5cgVXCnKjtYB7Pw=="
+      ) { pass(); } else { fail($decoded); };
+    ?>
+  </tr>
+  <tr>
     <td>Backup Worker - scan table - handles page 0 of table 3</td>
     <td>
     <?php
@@ -757,9 +810,5 @@ function fail($obj) {
     ?>
     </td>
   </tr> 
-
-
-
-
 </table>
 <h4> End of tests </h4>
