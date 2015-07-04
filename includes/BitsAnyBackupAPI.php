@@ -831,8 +831,10 @@
       $ctime = filectime($path);
       $mtime = filemtime($path);
       if(function_exists("posix_getgrgid")) {
-        $group = posix_getgrgid(filegroup($path))["name"];
-        $user = posix_getpwuid(fileowner($path))["name"];
+        $group_gid = posix_getgrgid(filegroup($path));
+        $group = $group_gid["name"];
+        $user_gid = posix_getpwuid(fileowner($path));
+        $user = $user_gid["name"];
       } else {
         $group = "windows";
         $user = "windows";
